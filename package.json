@@ -1,0 +1,32 @@
+{
+  "name": "niyon-be",
+  "version": "1.0.0",
+  "description": "Niyon Graphql Server",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Lambda-School-Labs/niyon-be.git"
+  },
+  "author": "Labs_pt_10",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Lambda-School-Labs/niyon-be/issues"
+  },
+  "homepage": "https://github.com/Lambda-School-Labs/niyon-be#readme",
+  "devDependencies": {
+    "dotenv": "^8.2.0",
+    "morgan": "^1.10.0",
+    "nodemon": "^2.0.3"
+  },
+  "dependencies": {
+    "apollo-server": "^2.13.0",
+    "bcrypt": "^4.0.1",
+    "express": "^4.17.1",
+    "graphql": "^15.0.0",
+    "helmet": "^3.22.0",
+    "jsonwebtoken": "^8.5.1"
+  }
+}
