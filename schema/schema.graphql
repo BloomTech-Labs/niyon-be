@@ -1,0 +1,42 @@
+enum UserType {
+    MENTOR
+    MENTEE
+}
+
+#enum JobTitle {
+#
+#}
+
+#enum TechStack {
+#
+#}
+
+type Job_Title {
+    id: ID!
+    name: String! #replace with enum after slack thread fills
+}
+
+type Tech {
+    id: ID!
+    name: String! #replace with enum after slack thread fills
+}
+
+type Location {
+    id: ID!
+    city: String!
+    country: String!
+}
+
+type User {
+    id: ID!
+    first_name: String
+    last_name: String
+    email: String!
+    password: String!
+    job_title: Job_Title
+    user_type: UserType!
+    tech_stack: [Tech]
+    location: Location
+}
+
+

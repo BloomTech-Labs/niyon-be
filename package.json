@@ -4,7 +4,8 @@
   "description": "Niyon Graphql Server",
   "main": "server.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "server": "nodemon -e js,graphql server.js"
   },
   "repository": {
     "type": "git",
@@ -22,11 +23,12 @@
     "nodemon": "^2.0.3"
   },
   "dependencies": {
-    "apollo-server": "^2.13.0",
     "bcrypt": "^4.0.1",
-    "express": "^4.17.1",
-    "graphql": "^15.0.0",
+    "graphql-import": "^1.0.2",
+    "graphql-yoga": "^1.18.3",
     "helmet": "^3.22.0",
-    "jsonwebtoken": "^8.5.1"
+    "jsonwebtoken": "^8.5.1",
+    "knex": "^0.21.1",
+    "pg": "^8.0.3"
   }
 }
