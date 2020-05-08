@@ -1,14 +1,12 @@
 module.exports = {
   // connection: 'postgres://joe:123@localhost/graphqlknex',
   dev: {
-    client: 'pg',
+    client: 'sqlite3',
     connection: {
-      database: 'dbname', // need to create db
-      user: 'joe',
-      password: '123'
-    },
-    useNullAsDefault: true
-  },
+      filename: './db/data.db3', // need to create db
+      },
+    useNullAsDefault: true,
+
   migrations: {
     directory: './db/migrations'
   },
@@ -20,6 +18,7 @@ module.exports = {
       conn.run("PRAGMA foreign_keys = ON", done)
     }
   }
+}
 };
 
 
