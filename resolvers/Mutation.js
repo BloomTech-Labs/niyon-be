@@ -1,7 +1,6 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
-
 async function register(parent, args, context) {
     const newUser = args.input;
     const hashedPassword = await bcrypt.hash(newUser.password, 10);
@@ -13,16 +12,15 @@ async function register(parent, args, context) {
     return {token, user}
 }
 
-async function login(parent, args, context) {
-    const user = args.input;
-    const authUser = await context.helpers.user.findBy({
+async function login(_, {input}, context) {
+    const user = input;
+    const {password, ...authUser} = await context.helpers.user.findBy({
         email: user.email
     })
         if(!authUser) {
             throw new Error(`${user.email} does not exist`)
         }
-
-    const validate = await bcrypt.compare(user.password, authUser.password);
+    const validate = await bcrypt.compare(user.password, password);
         if(!validate) {
             throw new Error('Invalid password')
         }
@@ -31,12 +29,14 @@ async function login(parent, args, context) {
             id: authUser.id,
             email: authUser.email,
             user_type: authUser.user_type,
-            password: authUser.password
-        };
-        console.log(authUser.user_type)
+            password: user.password
+        }
 
     const token = jwt.sign(payload, 'process.env.JWT_SECRET')
-    return { token, payload }
+    return {
+        token: token,
+        user: payload
+    }
 }
 
 module.exports = {
