@@ -5,7 +5,7 @@ type Query {
 type Mutation {
     auth: User!
     register(input: addUser!): AuthUser!
-    login(input: authUser!): User!
+    login(input: authUser!): AuthUser!
 }
 
 enum UserType {
