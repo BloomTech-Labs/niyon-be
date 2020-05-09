@@ -1,2 +1,6 @@
-// import all models here to export to server.js
+const user = require('./user');
+
+module.exports = {
+    user
+};
 
