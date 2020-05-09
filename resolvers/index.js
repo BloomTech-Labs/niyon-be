@@ -1,1 +1,5 @@
-// import all resolvers here to export
+const Mutation = require('./Mutation');
+
+module.exports = {
+    Mutation
+}

@@ -1,15 +1,17 @@
+type Query {
+    me: User!
+}
+
+type Mutation {
+    auth: User!
+    register(input: addUser!): AuthUser!
+    login(input: authUser!): User!
+}
+
 enum UserType {
     MENTOR
     MENTEE
 }
-
-#enum JobTitle {
-#
-#}
-
-#enum TechStack {
-#
-#}
 
 type Job_Title {
     id: ID!
@@ -27,6 +29,11 @@ type Location {
     country: String!
 }
 
+type AuthUser {
+    token: String!
+    user: User!
+}
+
 type User {
     id: ID!
     first_name: String
@@ -39,4 +46,14 @@ type User {
     location: Location
 }
 
+input addUser {
+    email: String!
+    password: String!
+    user_type: UserType!
+}
+
+input authUser {
+    email: String!
+    password: String!
+}
 
