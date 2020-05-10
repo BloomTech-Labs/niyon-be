@@ -1,5 +1,10 @@
+#resolver types for Query and Mutation
 type Query {
     me: User!
+    tech: [Tech]!
+    location: [Location]!
+    job_title: [Job_Title]!
+    profileStart: Profile_Package!
 }
 
 type Mutation {
@@ -8,30 +13,28 @@ type Mutation {
     login(input: authUser!): AuthUser!
 }
 
+#enum type to only allow the use of two user types
 enum UserType {
     MENTOR
     MENTEE
 }
 
+#main types
 type Job_Title {
     id: ID!
-    name: String! #replace with enum after slack thread fills
+    job_title: String! #replace with enum after slack thread fills
 }
 
 type Tech {
     id: ID!
     name: String! #replace with enum after slack thread fills
+    type: String!
 }
 
 type Location {
     id: ID!
     city: String!
     country: String!
-}
-
-type AuthUser {
-    token: String!
-    user: User!
 }
 
 type User {
@@ -46,6 +49,20 @@ type User {
     location: Location
 }
 
+#type for login requiring a token and an actual user
+type AuthUser {
+    token: String!
+    user: User!
+}
+
+#types used for querying data
+type Profile_Package {
+    location: [Location]!
+    job_title: [Job_Title]!
+    tech_stack: [Tech]!
+}
+
+#input types to define what the client needs to send up
 input addUser {
     email: String!
     password: String!
