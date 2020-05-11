@@ -4,10 +4,11 @@ module.exports = {
     createUser,
     findBy
 }
-
+//helper model to use with registration to insert new user in db
 async function createUser(data) {
     try {
         const [ id ] = await db('user').insert(data);
+        //inserting new user and returning their created id and entered email
         return await db('user')
             .where({ id })
             .select('id', 'email').first();
@@ -15,7 +16,8 @@ async function createUser(data) {
         console.log(e)
     }
 }
-
+//helper model to search users by a filter
+//returns nonNullable fields for user (id / password / email / user_type)
 async function findBy(filter) {
     try {
         return db("user")
