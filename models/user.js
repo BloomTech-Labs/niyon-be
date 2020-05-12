@@ -23,7 +23,7 @@ async function findBy(filter) {
         return db("user")
             .select("id", "password", "email", "user_type")
             .where(filter)
-            .first()
+            .first();
     } catch (e) {
         console.log(e)
     }
