@@ -1,6 +1,7 @@
 const express = require('express');
 const helmet = require('helmet');
 const authRouter = require('./Routers/AuthRouter/AuthRouter');
+const profileRouter = require('./Routers/ProfileRouter/ProfilePackage');
 
 const PORT = process.env.PORT || 4000;
 
@@ -9,6 +10,7 @@ const server = express();
 server.use(express.json());
 server.use(helmet());
 server.use('/auth', authRouter);
+server.use('/profile', profileRouter);
 
 server.get('/', (req, res) => {
     res.status(200).json({
@@ -23,6 +25,10 @@ server.use('/', (err, req, res, next) => {
     })
 })
 
-server.listen(PORT, () => {
-    console.log(`--- server running on port ${PORT} ---`);
-})
+if (!module.parent) {
+    server.listen(PORT, () => {
+        console.log(`--- server running on port ${PORT} ---`);
+    })
+}
+
+module.exports = server;
