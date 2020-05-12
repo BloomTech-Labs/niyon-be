@@ -1,27 +1,19 @@
-const { GraphQLServer,  } = require('graphql-yoga');
-const resolvers = require('./resolvers/index');
-const helpers = require('./models/index');
+const express = require('express');
+const helmet = require('helmet');
 
-//creating a graphql-yoga server with...
-//(1) typeDefs from our schema.grqphql file in the schema folder
-//(2) resolvers from our index file in the resolvers folder
-//(3) adding the request object into our context
-//(4) adding our helper models from the index file in our models folder
-const server = new GraphQLServer({
-   typeDefs: './schema/schema.graphql',
-   resolvers,
-   context: request => {
-       return {
-           ...request,
-           helpers
-       }
-   }
-});
+const PORT = process.env.PORT || 4000;
 
-server.start()
-    .then(res => {
-        console.log(`Server is running on http://localhost:4000`)
+const server = express();
+
+server.use(express.json());
+server.use(helmet());
+
+server.get('/', (req, res) => {
+    res.status(200).json({
+        welcomeMessage: 'Welcome to the Niyon Backend'
     })
-    .catch(err => {
-        console.log(`errorMessage: ${err}`)
-    });
+})
+
+server.listen(PORT, () => {
+    console.log(`--- server running on port ${PORT} ---`);
+})
