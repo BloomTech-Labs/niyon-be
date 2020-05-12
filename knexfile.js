@@ -1,9 +1,12 @@
 module.exports = {
   // connection: 'postgres://joe:123@localhost/graphqlknex',
   dev: {
-    client: 'sqlite3',
+    client: 'pg',
     connection: {
-      filename: './db/data.db3', // need to create db
+      database: 'database',
+      port: 5432,
+      user: "postgres",
+      password: "tim" //filename: './db/data.db3', // need to create db
       },
     useNullAsDefault: true,
 
@@ -13,11 +16,11 @@ module.exports = {
   seeds: {
     directory: './db/seeds'
   },
-  pool: {
-    afterCreate: (conn, done) => {
-      conn.run("PRAGMA foreign_keys = ON", done)
-    }
-  }
+  // pool: {
+  //   afterCreate: (conn, done) => {
+  //     conn.run("PRAGMA foreign_keys = ON", done)
+  //   }}
+  
 }
 };
 
