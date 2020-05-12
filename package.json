@@ -19,15 +19,15 @@
   "homepage": "https://github.com/Lambda-School-Labs/niyon-be#readme",
   "devDependencies": {
     "dotenv": "^8.2.0",
+    "jest": "^26.0.1",
     "nodemon": "^2.0.3",
-    "sqlite3": "^4.2.0"
+    "sqlite3": "^4.2.0",
+    "supertest": "^4.0.2"
   },
   "dependencies": {
     "bcrypt": "^4.0.1",
-    "graphql": "^15.0.0",
-    "graphql-directive": "^0.2.1",
-    "graphql-import": "^1.0.2",
-    "graphql-yoga": "^1.18.3",
+    "express": "^4.17.1",
+    "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.1",
     "pg": "^8.0.3"
