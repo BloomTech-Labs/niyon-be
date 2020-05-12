@@ -21,10 +21,12 @@ router.post('/register', async (req, res, next) => {
         const newUser = await helpers.createUser({...req.body, password: hashedPW});
         // creating a token and sending by newly created user
         const token = jwt.sign({payload: newUser}, process.env.JWT_SECRET);
-        // setting a token in the cookie jar, FE responsible to destroy cookie on logout
-        res.cookie('token', token)
         // sending back newly created user with auto ID
-        res.status(201).json(newUser)
+        // also sending back token to be used in the headers under (authorization) for protected routes
+        res.status(201).json({
+            token: token,
+            user: newUser
+        })
     } catch (e) {
         console.log(e);
         next();
@@ -54,9 +56,12 @@ router.post('/login', async (req, res, next) => {
                 };
         // creating a token with the payload of the logged in user
         const token = jwt.sign(payload, process.env.JWT_SECRET);
-        // setting a token in the cookie jar, FE responsible to destroy cookie on user log out
-        res.cookie('token', token)
-        return res.json(payload)
+        // returning the logged in user ( id / email / user_type )
+       // also sending back token to be used in the headers under (authorization) for protected routes
+        return res.json({
+            token: token,
+            user: payload
+        })
    } catch (e) {
        console.log(e);
        next();
