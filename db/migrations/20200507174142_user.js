@@ -45,7 +45,18 @@ exports.up = async function(knex) {
       .onUpdate("CASCADE")
       user_tech.primary(['tech_id','user_id'])
       })
-
+    await knex.schema.createTable('user_connections', table => {
+        table.integer('userReq')
+            .references('id')
+            .inTable('user')
+            .onUpdate('CASCADE')
+            .onDelete('CASCADE');
+        table.integer('userAcc')
+            .references('id')
+            .inTable('user')
+            .onUpdate('CASCADE')
+            .onDelete('CASCADE');
+    })
 };
 
 exports.down = async function(knex) {
