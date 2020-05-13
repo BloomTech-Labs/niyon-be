@@ -1,134 +1,126 @@
-🚫 Note: All lines that start with 🚫 are instructions and should be deleted before this is posted to your portfolio. This is intended to be a guideline. Feel free to add your own flare to it.
-
-🚫 The numbers 1️⃣ through 3️⃣ next to each item represent the week that part of the docs needs to be comepleted by.  Make sure to delete the numbers by the end of Labs.
-
-🚫 Each student has a required minimum number of meaningful PRs each week per the rubric.  Contributing to docs does NOT count as a PR to meet your weekly requirements.
-
 # API Documentation
+#### Deployed Base URL:
+We are currently working on getting the BE deployed to Heroku, will update once completed.
 
-#### 1️⃣ Backend delpoyed at [🚫name service here](🚫add URL here) <br>
-
-## 1️⃣ Getting started
+## Getting started
 
 To get the server running locally:
 
-🚫 adjust these scripts to match your project
-
 - Clone this repo
-- **yarn install** to install all required dependencies
-- **yarn server** to start the local server
-- **yarn test** to start server using testing environment
+- **npm install** to install all required dependencies
+- **npx knex migrate:latest --env dev** to create sqlite testing DB environment
+- **npx knex seed:run --env dev** to seed the newly created DB environment
+- **npm run server** to start server locally on port 4000
 
-### Backend framework goes here
+### Node.js / express
 
-🚫 Why did you choose this framework?
+-    Lambda Labs only allows REST api's now
+-    Node.js is a popular and easy to set up backend language
+-    Having our backend and frontend both written in JavaScript enables the team to have better communication
+-    Express offers a robust set of features for web applications
 
--    Point One
--    Point Two
--    Point Three
--    Point Four
+## Endpoints
 
-## 2️⃣ Endpoints
-
-🚫This is a placeholder, replace the endpoints, access controll, and descriptioin to match your project
-
-#### Organization Routes
+#### Registration / Login Routes
 
 | Method | Endpoint                | Access Control | Description                                  |
 | ------ | ----------------------- | -------------- | -------------------------------------------- |
-| GET    | `/organizations/:orgId` | all users      | Returns the information for an organization. |
-| PUT    | `/organizatoins/:orgId` | owners         | Modify an existing organization.             |
-| DELETE | `/organizations/:orgId` | owners         | Delete an organization.                      |
+| POST    | `/auth/register`       | public         | Creates a new user / returns token           |
+| POST    | `/auth/login`          | public         | Checks entered credentials / returns token   |
 
-#### User Routes
+#### Profile Starter Kit Route
 
 | Method | Endpoint                | Access Control      | Description                                        |
 | ------ | ----------------------- | ------------------- | -------------------------------------------------- |
-| GET    | `/users/current`        | all users           | Returns info for the logged in user.               |
-| GET    | `/users/org/:userId`    | owners, supervisors | Returns all users for an organization.             |
-| GET    | `/users/:userId`        | owners, supervisors | Returns info for a single user.                    |
-| POST   | `/users/register/owner` | none                | Creates a new user as owner of a new organization. |
-| PUT    | `/users/:userId`        | owners, supervisors |                                                    |
-| DELETE | `/users/:userId`        | owners, supervisors |                                                    |
-
+| GET    |`/profile/profilePackage`| requires token      | Returns all data to complete profile set up        |
 # Data Model
 
-🚫This is just an example. Replace this with your data model
-
-#### 2️⃣ ORGANIZATIONS
+#### Registration Example
 
 ---
 
 ```
+User Input:
 {
-  id: UUID
-  name: STRING
-  industry: STRING
-  paid: BOOLEAN
-  customer_id: STRING
-  subscription_id: STRING
+  email: johndoe@gmail.com
+  user_type: Mentor
+  password: ilovetacos
+}
+Returned:
+{
+  token: lasd890gklj309Likajsgf09w234j0mfgal....ect
+  user: {
+        id: 12
+        email: johndoe@gmail.com
+    }
 }
 ```
-
-#### USERS
+#### Login Example
 
 ---
 
 ```
+User Input:
 {
-  id: UUID
-  organization_id: UUID foreign key in ORGANIZATIONS table
-  first_name: STRING
-  last_name: STRING
-  role: STRING [ 'owner', 'supervisor', 'employee' ]
-  email: STRING
-  phone: STRING
-  cal_visit: BOOLEAN
-  emp_visit: BOOLEAN
-  emailpref: BOOLEAN
-  phonepref: BOOLEAN
+  email: johndoe@gmail.com
+  password: ilovetacos
+}
+Returned:
+{
+  token: lasd890gklj309Likajsgf09w234j0mfgal....ect
+  user: {
+        id: 12
+        email: johndoe@gmail.com
+        user_type: Mentor
+    }
+}
+```
+#### Profile Starter Kit Return
+###### NOTE: To fully complete profile you will also need to ask for first and last name
+
+---
+
+```
+set headers: authorization === token recieved during registration or login
+{
+ tech: [{ id / name /  type }] 53 objs
+ location: [{ id / city /  country }] 125 objs
+ jobs: [{ id / job_title }] 27 objs
 }
 ```
 
-## 2️⃣ Actions
+## Models
+#### User
 
-🚫 This is an example, replace this with the actions that pertain to your backend
+`createUser()` -> Creates a user in our DB
 
-`getOrgs()` -> Returns all organizations
+`findBy(filter)` -> Find a user by entered filter
 
-`getOrg(orgId)` -> Returns a single organization by ID
+#### Tech
 
-`addOrg(org)` -> Returns the created org
+`getTech()` -> Returns an array of all stored tech
 
-`updateOrg(orgId)` -> Update an organization by ID
+#### Job Title
 
-`deleteOrg(orgId)` -> Delete an organization by ID
-<br>
-<br>
-<br>
-`getUsers(orgId)` -> if no param all users
+`getTitles()` -> Returns an array of all stored job titles
 
-`getUser(userId)` -> Returns a single user by user ID
+#### Location
 
-`addUser(user object)` --> Creates a new user and returns that user. Also creates 7 availabilities defaulted to hours of operation for their organization.
+`getLocations()` -> Returns an array of all stored locations
 
-`updateUser(userId, changes object)` -> Updates a single user by ID.
+#### Middleware
+`restricted()` -> Used for all protected routes and requires a token set in the header under authorization
 
-`deleteUser(userId)` -> deletes everything dependent on the user
-
-## 3️⃣ Environment Variables
+## Environment Variables
 
 In order for the app to function correctly, the user must set up their own environment variables.
 
 create a .env file that includes the following:
-
-🚫 These are just examples, replace them with the specifics for your app
     
-    *  STAGING_DB - optional development db for using functionality not available in SQLite
-    *  NODE_ENV - set to "development" until ready for "production"
-    *  JWT_SECRET - you can generate this by using a python shell and running import random''.join([random.SystemRandom().choice('abcdefghijklmnopqrstuvwxyz0123456789!@#\$%^&amp;*(-*=+)') for i in range(50)])
-    *  SENDGRID_API_KEY - this is generated in your Sendgrid account
-    *  stripe_secret - this is generated in the Stripe dashboard
+    *  JWT_SECRET - generate with jsonwebtoken dependencie
+    *  DB_SECRET - provided by Heroku during deployment
+    *  HEROKU_USER - provided by Heroku during deployment
+    *  DB_PASSWORD - provided by Heroku during deployment
     
 ## Contributing
 
