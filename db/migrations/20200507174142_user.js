@@ -18,6 +18,7 @@ exports.up = async function(knex) {
      user.increments('id');
      user.string('first_name')
      user.string('last_name')
+     user.text('bio')
      user.string('email', 50).notNullable().unique();
      user.string('password', 10).notNullable();
      user.string('user_type').defaultTo("MENTOR");
