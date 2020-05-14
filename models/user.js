@@ -2,7 +2,9 @@ const db = require('../db/config');
 
 module.exports = {
     createUser,
-    findBy
+    findBy,
+    findById,
+    update
 }
 //helper model to use with registration to insert new user in db
 async function createUser(data) {
@@ -24,6 +26,33 @@ async function findBy(filter) {
             .select("id", "password", "email", "user_type")
             .where(filter)
             .first();
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+async function findById(id) {
+    try {
+        return db('user')
+            .select("*")
+            .where({id: id})
+            .first()
+    } catch (e) {
+        console.log(e);
+    }
+}
+
+async function update(id,data) {
+    try {
+        return await db('user').update(data).where({id: id})
+    } catch (e) {
+        console.log(e)
+    }
+}
+
+async function addJob(user_id, job_id) {
+    try {
+
     } catch (e) {
         console.log(e)
     }
