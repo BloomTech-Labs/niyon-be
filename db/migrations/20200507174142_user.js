@@ -18,6 +18,7 @@ exports.up = async function(knex) {
      user.increments('id');
      user.string('first_name')
      user.string('last_name')
+     user.text('bio')
      user.string('email', 50).notNullable().unique();
      user.string('password', 10).notNullable();
      user.string('user_type').defaultTo("MENTOR");
@@ -60,6 +61,7 @@ exports.up = async function(knex) {
 };
 
 exports.down = async function(knex) {
+  await knex.schema.dropTableIfExists('user_connections')
   await knex.schema.dropTableIfExists("user_tech")
   await knex.schema.dropTableIfExists("user")
   await knex.schema.dropTableIfExists("tech")

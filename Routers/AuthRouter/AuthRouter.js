@@ -55,6 +55,7 @@ router.post('/login', async (req, res, next) => {
                     user_type: authUser.user_type
                 };
         // creating a token with the payload of the logged in user
+
         const token = jwt.sign(payload, process.env['JWT_SECRET']);
         // returning the logged in user ( id / email / user_type )
        // also sending back token to be used in the headers under (authorization) for protected routes
