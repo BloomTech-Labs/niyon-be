@@ -1,6 +1,6 @@
 const supertest = require('supertest')
-const server = require('../server')
-const db = require('../db/config')
+const server = require('../../server')
+const db = require('../../db/config')
 
 
 
