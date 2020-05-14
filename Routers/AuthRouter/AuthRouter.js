@@ -20,7 +20,7 @@ router.post('/register', async (req, res, next) => {
         // creating a new user with entered input and a hashed password
         const newUser = await helpers.createUser({...req.body, password: hashedPW});
         // creating a token and sending by newly created user
-        const token = jwt.sign({payload: newUser}, process.env.JWT_SECRET);
+        const token = jwt.sign({payload: newUser}, process.env['JWT_SECRET']);
         // sending back newly created user with auto ID
         // also sending back token to be used in the headers under (authorization) for protected routes
         res.status(201).json({
@@ -55,7 +55,8 @@ router.post('/login', async (req, res, next) => {
                     user_type: authUser.user_type
                 };
         // creating a token with the payload of the logged in user
-        const token = jwt.sign(payload, process.env["JWT_SECRET"]);
+
+        const token = jwt.sign(payload, process.env['JWT_SECRET']);
         // returning the logged in user ( id / email / user_type )
        // also sending back token to be used in the headers under (authorization) for protected routes
         return res.json({
