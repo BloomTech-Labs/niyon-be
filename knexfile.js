@@ -32,6 +32,7 @@ module.exports = {
     //   port: 5432,
     //   user: process.env["HEROKU_USER "],
     //   password: process.env["DB_PASSWORD "] //filename: './db/data.db3', // need to create db
+    client: "sqlite3",
     connection: {
       filename: './db/testNiyon.db3'
     },
@@ -41,7 +42,7 @@ module.exports = {
       directory: './db/migrations'
     },
     seeds: {
-      directory: './db/seeds'
+      directory: './db/test/seeds'
     },
     // pool: {
     //   afterCreate: (conn, done) => {

@@ -2,7 +2,7 @@ const express = require('express');
 const helmet = require('helmet');
 const authRouter = require('./Routers/AuthRouter/AuthRouter');
 const profileRouter = require('./Routers/ProfileRouter/ProfilePackage');
-
+require("dotenv").config();
 const PORT = process.env.PORT || 4000;
 
 const server = express();
