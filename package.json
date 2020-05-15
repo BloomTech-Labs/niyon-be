@@ -6,7 +6,7 @@
   "scripts": {
     "test": "npx knex seed:run --env test && cross-env NODE_ENV=test jest --verbose",
     "server": "nodemon -r dotenv/config server.js",
-    "build": "npx knex migrate:latest --env dev && npx knex seed:run --env dev"
+    "build": "npx knex migrate:latest --env prod && npx knex seed:run --env prod"
   },
   "repository": {
     "type": "git",
