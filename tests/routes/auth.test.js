@@ -1,6 +1,6 @@
 const supertest = require('supertest')
-const server = require('../server')
-const db = require('../db/config')
+const server = require('../../server')
+const db = require('../../db/config')
 
 
 
@@ -8,6 +8,8 @@ afterAll(async () => {
    await db.destroy()
   
 })
+
+
 
 
 test("create a user", async () => {
@@ -33,5 +35,5 @@ test("login try with no email",async()=>{
    const res = await supertest(server)
    .post('/auth/register')//testing route
    .send({email:'', password:"password1"})//testing without email
-   expect(res.status).toBe(404)//testing to see if 404 comes back
+   expect(res.status).toBe(400)//testing to see if 404 comes back
 })

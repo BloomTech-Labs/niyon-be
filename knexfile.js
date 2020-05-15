@@ -1,15 +1,19 @@
+require('dotenv').config();
+
+
 module.exports = {
   // connection: 'postgres://joe:123@localhost/graphqlknex',
   dev: {
-    client: 'sqlite3',
-    // client: 'pg',
-    // connection: {
-    //   database: process.env["DB_SECRET "],
-    //   port: 5432,
-    //   user: process.env["HEROKU_USER "],
-    //   password: process.env["DB_PASSWORD "] //filename: './db/data.db3', // need to create db
+    
+    client: 'pg',
     connection: {
-      filename: './db/niyon.db3'
+    database: 'database', //process.env["LOCAL_DB "],
+    user: 'postgres', //process.env["LOCAL_USER "],
+    password: 'tim', //process.env["LOCAL_PASSWORD "],
+    port: 5432,
+    // connection: {
+    //   //process.env["LOCAL_PASSWORD"], //filename: './db/data.db3', // need to create db
+    // },
     },
     useNullAsDefault: true,
 
@@ -26,17 +30,13 @@ module.exports = {
   
   },
   test: {
-    // client: 'pg',
-    // connection: {
-    //   database: process.env["DB_SECRET "],
-    //   port: 5432,
-    //   user: process.env["HEROKU_USER "],
-    //   password: process.env["DB_PASSWORD "] //filename: './db/data.db3', // need to create db
-    client: "sqlite3",
-    connection: {
-      filename: './db/testNiyon.db3'
-    },
-    useNullAsDefault: true,
+   client: "sqlite3",
+   connection: {
+    filename: './db/testNiyon.db3'
+  },
+  useNullAsDefault: true,
+    
+    
 
     migrations: {
       directory: './db/migrations'
@@ -44,12 +44,13 @@ module.exports = {
     seeds: {
       directory: './db/test/seeds'
     },
+  },
     // pool: {
     //   afterCreate: (conn, done) => {
     //     conn.run("PRAGMA foreign_keys = ON", done)
     //   }}
 
-  },
+  
     prod: {
     client: 'pg',
     connection: {
