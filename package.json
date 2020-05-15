@@ -4,7 +4,7 @@
   "description": "Niyon Graphql Server",
   "main": "server.js",
   "scripts": {
-    "test": "npx knex seed:run --env test && cross-env NODE_ENV=test jest --verbose",
+    "test": "npx knex migrate:rollback --env test && npx knex migrate:latest --env test && npx knex seed:run --env test &&  cross-env NODE_ENV=test jest --verbose",
     "server": "nodemon -r dotenv/config server.js",
     "build": "npx knex migrate:latest --env prod && npx knex seed:run --env prod"
   },

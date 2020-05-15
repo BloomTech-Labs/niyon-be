@@ -4,7 +4,7 @@ exports.seed = async function(knex) {
       {
           first_name: 'joe',
           last_name: 'thompson',
-          email: 'joe@gmail.com',
+          email: 'joe1@gmail.com',
           password: '123',
           user_type: 'MENTOR',
           job_title_id: 1,
@@ -13,7 +13,7 @@ exports.seed = async function(knex) {
       {
           first_name: 'tawne',
           last_name: 'thompson',
-          email: 'tawne@gmail.com',
+          email: 'tawne1@gmail.com',
           password: '123',
           user_type: 'MENTOR',
           job_title_id: 12,
