@@ -8,6 +8,11 @@ const router = express.Router();
 router.post('/register', async (req, res, next) => {
     try {
         const { email, password } = req.body;
+           if ( email === "" || null) {
+                return  res.status(400).json({
+                    errorMessage: 'Must provide valid email'
+                })
+            }
         // checking entered email to make sure it is not already registered
         const user = await helpers.findBy({email});
             if (user) {
