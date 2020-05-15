@@ -49,6 +49,26 @@ module.exports = {
     //     conn.run("PRAGMA foreign_keys = ON", done)
     //   }}
 
+  },
+    prod: {
+    client: 'pg',
+    connection: {
+      database: process.env["DATABASE"],
+      user: process.env["USER_HEROKU"],
+      password: process.env["PASSWORD_HEROKU"],
+      port: 5432
+    },
+    useNullAsDefault: true,
+    migrations: {
+      directory: './db/migrations'
+    },
+    seeds: {
+      directory: './db/seeds'
+    },
+    // pool: {
+    //   afterCreate: (conn, done) => {
+    //     conn.run("PRAGMA foreign_keys = ON", done)
+    //   }}
   }
 };
 
