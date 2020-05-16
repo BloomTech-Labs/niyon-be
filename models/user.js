@@ -1,4 +1,5 @@
 const db = require('../db/config');
+const bcrypt = require('bcrypt');
 
 module.exports = {
     createUser,
@@ -7,23 +8,20 @@ module.exports = {
     update
 }
 //helper model to use with registration to insert new user in db
-async function createUser(data) {
-    try {
-        const [ id ] = await db('user').insert(data);
+async function createUser(user) {
+        // hashing the entered password for security
+        user.password = await bcrypt.hash(user.password, 10);
+        await db("user").insert(user);
+        return findBy({email: user.email});
         //inserting new user and returning their created id and entered email
-        return await db('user')
-            .where({ id })
-            .select('id', 'email').first();
-    } catch (e) {
-        console.log(e)
     }
-}
+
 //helper model to search users by a filter
-//returns nonNullable fields for user (id / password / email / user_type)
+//returns nonNullable fields for user (id / email / user_type)
 async function findBy(filter) {
     try {
         return db("user")
-            .select("id", "password", "email", "user_type")
+            .select("id",  "email", "user_type")
             .where(filter)
             .first();
     } catch (e) {
@@ -31,15 +29,11 @@ async function findBy(filter) {
     }
 }
 
-async function findById(id) {
-    try {
+function findById(id) {
         return db('user')
-            .select("*")
-            .where({id: id})
+            .select('id', 'email')
+            .where('id', id)
             .first()
-    } catch (e) {
-        console.log(e);
-    }
 }
 
 async function update(id,data) {
