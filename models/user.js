@@ -21,7 +21,7 @@ async function createUser(user) {
 async function findBy(filter) {
     try {
         return db("user")
-            .select("id",  "email", "user_type")
+            .select("id",  "email", "user_type", "password")
             .where(filter)
             .first();
     } catch (e) {
