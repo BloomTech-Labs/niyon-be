@@ -7,9 +7,9 @@ module.exports = {
     
     client: 'pg',
     connection: {
-    database: 'database', //process.env["LOCAL_DB "],
-    user: 'postgres', //process.env["LOCAL_USER "],
-    password: 'tim', //process.env["LOCAL_PASSWORD "],
+    database: process.env.LOCAL_DB, //process.env["LOCAL_DB "],
+    user: process.env.LOCAL_USER, //process.env["LOCAL_USER "],
+    password: process.env.LOCAL_PASSWORD, //process.env["LOCAL_PASSWORD "],
     port: 5432,
     // connection: {
     //   //process.env["LOCAL_PASSWORD"], //filename: './db/data.db3', // need to create db

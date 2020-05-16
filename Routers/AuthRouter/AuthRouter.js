@@ -7,9 +7,9 @@ const router = express.Router();
 
 router.post('/register', async (req, res, next) => {
     try {
-        const { email, password } = req.body;
-           if ( email === "" || null) {
-                return  res.status(400).json({
+        const { email, password, user_type } = req.body;
+           if (!email) {
+                return res.status(400).json({
                     errorMessage: 'Must provide valid email'
                 })
             }
@@ -20,14 +20,13 @@ router.post('/register', async (req, res, next) => {
                     errorMessage: `${email} is already registered`
                 })
             }
-        // hashing the entered password for security
-        const hashedPW = await bcrypt.hash(password, 10);
         // creating a new user with entered input and a hashed password
-        const newUser = await helpers.createUser({...req.body, password: hashedPW});
+        const newUser = await helpers.createUser(req.body);
         // creating a token and sending by newly created user
         const token = jwt.sign({payload: newUser}, process.env['JWT_SECRET']);
         // sending back newly created user with auto ID
         // also sending back token to be used in the headers under (authorization) for protected routes
+        console.log(newUser)
         res.status(201).json({
             token: token,
             user: newUser

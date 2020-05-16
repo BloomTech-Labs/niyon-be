@@ -22,7 +22,7 @@
     "dotenv": "^8.2.0",
     "jest": "^26.0.1",
     "nodemon": "^2.0.3",
-    "sqlite3": "^4.2.0",
+    "sqlite": "^4.0.7",
     "supertest": "^4.0.2"
   },
   "dependencies": {
@@ -37,5 +37,4 @@
   "jest": {
     "testEnvironment": "node"
   }
-  
 }
