@@ -22,6 +22,8 @@ router.post('/register', async (req, res, next) => {
             }
         // creating a new user with entered input and a hashed password
         const newUser = await helpers.createUser(req.body);
+            // setting password to null to return to client for security
+            newUser.password = null;
         // creating a token and sending by newly created user
         const token = jwt.sign({payload: newUser}, process.env['JWT_SECRET']);
         // sending back newly created user with auto ID

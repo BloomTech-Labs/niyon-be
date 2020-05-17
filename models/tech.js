@@ -3,7 +3,8 @@ const db = require('../db/config');
 module.exports = {
     getTech,
     getById,
-    updateTech
+    updateTech,
+    userTech
 }
 //helper model to return all tech data (id / name / type)
  function getTech() {
@@ -19,4 +20,12 @@ async function getById(id) {
 
 async function updateTech(userID, techID) {
     return db('user_tech').insert({user_id: userID, tech_id: techID})
+}
+
+async function userTech(id) {
+    return db('user_tech as ut')
+        .join("user as u", "u.id", "ut.user_id")
+        .join("tech as t", "t.id", "ut.tech_id")
+        .where("u.id", id)
+        .select("t.name", "t.type")
 }
