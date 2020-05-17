@@ -24,7 +24,7 @@ router.get('/profilePackage',restricted(), async (req, res, next) => {
 
 router.put('/profilePackage/:id', restricted(), async (req, res, next) => {
     try {
-        const { user_id, techs, location_id, job_title, first_name, last_name } = req.body;
+        const { user_id, techs, location_id, job_title, first_name, last_name, bio } = req.body;
         const findUser = await helpers.user.findById(user_id);
             if (findUser.first_name === null) {
                 await helpers.user.update(user_id, {first_name})
@@ -37,6 +37,9 @@ router.put('/profilePackage/:id', restricted(), async (req, res, next) => {
             }
             if (findUser.location_id === null) {
                 await helpers.user.update(user_id, {location_id})
+            }
+            if (findUser.bio === null) {
+                await helpers.user.update(user_id, {bio})
             }
 
         techs.forEach((arr) => {
@@ -75,6 +78,32 @@ router.put('/profilePackage/:id', restricted(), async (req, res, next) => {
         console.log(e)
         next()
     }
+});
+
+router.get('/:id', restricted(), async (req, res, next) => {
+   try {
+        const user_id = req.params.id;
+        const user = await helpers.user.findById(user_id);
+        const job = await helpers.job_title.getById(user.job_title_id);
+        const location = await helpers.location.getById(user.location_id);
+        const techs = await helpers.tech.userTech(user_id);
+
+        const returnedUser = {
+            ...user,
+            password: null,
+            job_title: job.Title,
+            location: location,
+            tech_stack: techs,
+        }
+        // deleting info before returning to client, ask Tim if this is a good idea or not?
+        delete returnedUser.location_id
+        delete returnedUser.job_title_id
+        delete returnedUser.password
+        console.log(returnedUser)
+   } catch (e) {
+       console.log(e);
+       next();
+   }
 });
 
 module.exports = router;

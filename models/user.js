@@ -5,7 +5,8 @@ module.exports = {
     createUser,
     findBy,
     findById,
-    update
+    update,
+    userProfile
 }
 //helper model to use with registration to insert new user in db
 async function createUser(user) {
@@ -21,7 +22,7 @@ async function createUser(user) {
 async function findBy(filter) {
     try {
         return db("user")
-            .select("id",  "email", "user_type", "password")
+            .select('*')
             .where(filter)
             .first();
     } catch (e) {
@@ -31,7 +32,7 @@ async function findBy(filter) {
 
 function findById(id) {
         return db('user')
-            .select('id', 'email')
+            .select('*')
             .where('id', id)
             .first()
 }
@@ -44,7 +45,7 @@ async function update(id,data) {
     }
 }
 
-async function addJob(user_id, job_id) {
+async function userProfile(id) {
     try {
 
     } catch (e) {
