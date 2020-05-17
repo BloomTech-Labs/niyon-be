@@ -90,16 +90,13 @@ router.get('/:id', restricted(), async (req, res, next) => {
 
         const returnedUser = {
             ...user,
-            password: null,
             job_title: job.Title,
             location: location,
             tech_stack: techs,
         }
-        // deleting info before returning to client, ask Tim if this is a good idea or not?
-        delete returnedUser.location_id
-        delete returnedUser.job_title_id
+        // deleting password from return object to client for security
         delete returnedUser.password
-        console.log(returnedUser)
+       return res.status(200).json(returnedUser)
    } catch (e) {
        console.log(e);
        next();
