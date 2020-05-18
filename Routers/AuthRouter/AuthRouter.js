@@ -7,7 +7,7 @@ const router = express.Router();
 
 router.post('/register', async (req, res, next) => {
     try {
-        const { email, password, user_type } = req.body;
+        const { email } = req.body;
            if (!email) {
                 return res.status(400).json({
                     errorMessage: 'Must provide valid email'
@@ -22,8 +22,14 @@ router.post('/register', async (req, res, next) => {
             }
         // creating a new user with entered input and a hashed password
         const newUser = await helpers.createUser(req.body);
-            // setting password to null to return to client for security
-            newUser.password = null;
+            // deleting password to return to client for security
+            delete newUser.password
+            // deleting null fields from user to return to client
+            delete newUser.first_name
+            delete newUser.last_name
+            delete newUser.bio
+            delete newUser.job_title_id
+            delete newUser.location_id
         // creating a token and sending by newly created user
         const token = jwt.sign({payload: newUser}, process.env['JWT_SECRET']);
         // sending back newly created user with auto ID
