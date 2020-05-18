@@ -11,7 +11,7 @@ function getLocations() {
 
 async function getById(id) {
     return db('location')
-        .select("city", "country")
+        .select("location")
         .where({id: id})
         .first();
 }

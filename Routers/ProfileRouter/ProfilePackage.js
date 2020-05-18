@@ -72,6 +72,8 @@ router.put('/profilePackage/:id', restricted(), async (req, res, next) => {
             location: getLocation,
             techs: tech_stack
         }
+        // deleting password for security
+        delete returnedUser.password
         console.log(returnedUser)
         res.status(201).json(returnedUser)
     } catch (e) {
@@ -87,19 +89,16 @@ router.get('/:id', restricted(), async (req, res, next) => {
         const job = await helpers.job_title.getById(user.job_title_id);
         const location = await helpers.location.getById(user.location_id);
         const techs = await helpers.tech.userTech(user_id);
-
+console.log(job)
         const returnedUser = {
             ...user,
-            password: null,
-            job_title: job.Title,
+            job_title: job.job_title,
             location: location,
             tech_stack: techs,
         }
-        // deleting info before returning to client, ask Tim if this is a good idea or not?
-        delete returnedUser.location_id
-        delete returnedUser.job_title_id
+        // deleting password from return object to client for security reasons
         delete returnedUser.password
-        console.log(returnedUser)
+       return res.status(200).json(returnedUser)
    } catch (e) {
        console.log(e);
        next();

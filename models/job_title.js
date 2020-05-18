@@ -11,7 +11,7 @@ function getTitles() {
 
 async function getById(id) {
     return db('job_title')
-        .select("job_title as Title")
+        .select("job_title")
         .where({id: id})
         .first();
 }

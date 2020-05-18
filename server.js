@@ -2,7 +2,9 @@ const express = require('express');
 const helmet = require('helmet');
 const authRouter = require('./Routers/AuthRouter/AuthRouter');
 const profileRouter = require('./Routers/ProfileRouter/ProfilePackage');
+const connRouter = require('./Routers/ConnectionRouter/ConnectionRouter')
 require("dotenv").config();
+
 const PORT = process.env.PORT || 4000;
 
 const server = express();
@@ -11,6 +13,7 @@ server.use(express.json());
 server.use(helmet());
 server.use('/auth', authRouter);
 server.use('/profile', profileRouter);
+server.use('/connection', connRouter);
 
 server.get('/', (req, res) => {
     res.status(200).json({
