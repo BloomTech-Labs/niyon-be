@@ -21,7 +21,7 @@ test("login user", async () => {
     .send({ email: "test@gmail.com", password: "test1232" }); //testing email password
   expect(res.status).toBe(200); //testing the status code to be 200
   expect(res.type).toBe("application/json"); //test the data coming back
-  expect(res.body.user.user_type).toBe("MENTOR"); //testing to see if mentor matchs
+  expect(res.body.user.user_type).toBe("Mentor"); //testing to see if mentor matchs
 });
 
 test("login try with no email", async () => {
