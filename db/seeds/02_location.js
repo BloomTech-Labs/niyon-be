@@ -1,5 +1,6 @@
 exports.seed = async function(knex) {
     await knex("location").insert([
+        {location: 'Unknown'},
         {location: 'Lagos, Nigeria'},
         {location: 'Kano, Nigeria'},
         {location: 'Ibadan, Nigeria'},

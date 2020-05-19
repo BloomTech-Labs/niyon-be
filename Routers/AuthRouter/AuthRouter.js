@@ -34,7 +34,6 @@ router.post('/register', async (req, res, next) => {
         const token = jwt.sign({payload: newUser}, process.env['JWT_SECRET']);
         // sending back newly created user with auto ID
         // also sending back token to be used in the headers under (authorization) for protected routes
-        console.log(newUser)
         res.status(201).json({
             token: token,
             user: newUser
