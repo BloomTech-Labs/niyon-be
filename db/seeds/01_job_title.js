@@ -1,5 +1,6 @@
 exports.seed = async function(knex) {
     await knex("job_title").insert([
+        {job_title: 'Unknown'},
         {job_title: 'Full Stack Web Developer'},
         {job_title: 'Data Scientist'},
         {job_title: 'UI Designer'},

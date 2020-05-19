@@ -13,7 +13,7 @@ module.exports = {
 
 async function getById(id) {
     return db('tech')
-        .select("name", "type")
+        .select("name", "type", "id")
         .where({id: id})
         .first();
 }
@@ -27,5 +27,5 @@ async function userTech(id) {
         .join("user as u", "u.id", "ut.user_id")
         .join("tech as t", "t.id", "ut.tech_id")
         .where("u.id", id)
-        .select("t.name", "t.type")
+        .select("t.name", "t.type", "t.id")
 }

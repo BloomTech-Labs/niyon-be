@@ -24,7 +24,8 @@ router.get('/profilePackage',restricted(), async (req, res, next) => {
 
 router.put('/profilePackage/:id', restricted(), async (req, res, next) => {
     try {
-        const { user_id, techs, location_id, job_title, first_name, last_name, bio } = req.body;
+        const user_id = req.params.id
+        const { techs, location_id, job_title, first_name, last_name, bio } = req.body;
         const findUser = await helpers.user.findById(user_id);
             if (findUser.first_name === null) {
                 await helpers.user.update(user_id, {first_name})
@@ -45,7 +46,7 @@ router.put('/profilePackage/:id', restricted(), async (req, res, next) => {
         techs.forEach((arr) => {
             const tech = helpers.tech.updateTech(user_id, arr)
                 .then(res => {
-                    console.log(res)
+                    console.log('promise resolved successfully')
                 })
                 .catch(err => {
                     console.log(err)
@@ -58,7 +59,7 @@ router.put('/profilePackage/:id', restricted(), async (req, res, next) => {
         techs.forEach((arr) => {
             const tech = helpers.tech.getById(arr)
                 .then(res => {
-                    console.log(res)
+                    console.log('promise resolved successfully')
                     tech_stack.push(res)
                 })
                 .catch(err => {
@@ -68,13 +69,12 @@ router.put('/profilePackage/:id', restricted(), async (req, res, next) => {
         const updatedUser = await helpers.user.findById(user_id)
         const returnedUser = {
                 ...updatedUser,
-            job_title: getTitle,
-            location: getLocation,
+            job_title: getTitle.job_title,
+            location: getLocation.location,
             techs: tech_stack
         }
         // deleting password for security
         delete returnedUser.password
-        console.log(returnedUser)
         res.status(201).json(returnedUser)
     } catch (e) {
         console.log(e)
@@ -86,16 +86,26 @@ router.get('/:id', restricted(), async (req, res, next) => {
    try {
         const user_id = req.params.id;
         const user = await helpers.user.findById(user_id);
+        if (!user.job_title_id) {
+            user.job_title_id = 1
+        }
         const job = await helpers.job_title.getById(user.job_title_id);
+        if (!user.location_id) {
+            user.location_id = 1
+        }
         const location = await helpers.location.getById(user.location_id);
+            if (!location.location) {
+                location.location = 1
+            }
         const techs = await helpers.tech.userTech(user_id);
-console.log(job)
+
         const returnedUser = {
             ...user,
             job_title: job.job_title,
-            location: location,
+            location: location.location,
             tech_stack: techs,
         }
+
         // deleting password from return object to client for security reasons
         delete returnedUser.password
        return res.status(200).json(returnedUser)
