@@ -1,14 +1,15 @@
 # API Documentation
 #### Deployed Base URL:
-We are currently working on getting the BE deployed to Heroku, will update once completed.
+https://niyon-app.herokuapp.com
 
 ## Getting started
 
 To get the server running locally:
+###### You will need postgresql installed, please check the .env config below for setup
 
 - Clone this repo
 - **npm install** to install all required dependencies
-- **npx knex migrate:latest --env dev** to create sqlite testing DB environment
+- **npx knex migrate:latest --env dev** to create postgres developer DB environment
 - **npx knex seed:run --env dev** to seed the newly created DB environment
 - **npm run server** to start server locally on port 4000
 
@@ -28,11 +29,13 @@ To get the server running locally:
 | POST    | `/auth/register`       | public         | Creates a new user / returns token           |
 | POST    | `/auth/login`          | public         | Checks entered credentials / returns token   |
 
-#### Profile Starter Kit Route
+#### Profile Routes
 
 | Method | Endpoint                | Access Control      | Description                                        |
 | ------ | ----------------------- | ------------------- | -------------------------------------------------- |
 | GET    |`/profile/profilePackage`| requires token      | Returns all data to complete profile set up        |
+| GET    |`/profile/:id`           | requires token      | Returns data for user by ID                        |
+| PUT    |`/profile/profilePackage/:id`| requires token      | Data needs to adhere to model below to update profile|
 # Data Model
 
 #### Registration Example
@@ -52,6 +55,7 @@ Returned:
   user: {
         id: 12
         email: johndoe@gmail.com
+        user_type: Mentor
     }
 }
 ```
@@ -87,29 +91,87 @@ set headers: authorization === token recieved during registration or login
  location: [{ id / city /  country }] 125 objs
  jobs: [{ id / job_title }] 27 objs
 }
+
+PUT profilePackage/:id: 
+
+User Input, all fields required: 
+{
+    techs: [3, 2, 5, 23] => array of tech_id's
+    location_id: 12 => ID for location
+    job_title: 34 => ID for job_title
+    first_name: STRING! => first name of user
+    last_name: STRING! => last name of user
+    bio: STRING! => small blurb about user
+}
+Return stucture for PUT by id is the same as GET by id listed below 
+
+GET user by id returned data stucture example:
+{
+    id: 23
+    first_name: "Tim"
+    last_name: "Taylor"
+    bio: "Working as a junior front end web dev"
+    email: "tTaylor@hotmail.com"
+    user_type: "mentee"
+    job_titile_id: 16
+    location_id: 6
+    job_title: "Junior Front End Developer"
+    location: "Yamoussoukro, Ivory Coast"
+    tech_stack: [
+            {
+              "name": "JavaScript",
+              "type": "Language",
+              "id": 3
+            },
+            {
+              "name": "Figma",
+              "type": "Soft",
+              "id": 22
+            },
+            {
+              "name": "React",
+              "type": "Framework",
+              "id": 18
+            }
+          ]
+    }
 ```
 
 ## Models
 #### User
 
-`createUser()` -> Creates a user in our DB
+`createUser()` => Creates a user in our DB
 
-`findBy(filter)` -> Find a user by entered filter
+`findBy(filter)` => Find a user by entered filter
+
+`findById(id)` => Find a user by ID, returns all fields 
+
+`update(id, data)` => ID(user id to be updated) / data(required fields to be updated)
 
 #### Tech
 
-`getTech()` -> Returns an array of all stored tech
+`getTech()` => Returns an array of all stored tech
+
+`getById(id)` => Returns all fields for a single tech
+
+`updateTech(userID, techID)` => requires a userID and techID to show relationship
+
+`userTech(id)` => ID(user id) returns all tech the user has a relation to
 
 #### Job Title
 
-`getTitles()` -> Returns an array of all stored job titles
+`getTitles()` => Returns an array of all stored job titles
+
+`getById(id)` => Returns a single job_title using job_title_id
 
 #### Location
 
-`getLocations()` -> Returns an array of all stored locations
+`getLocations()` => Returns an array of all stored locations
+
+`getById(id)` => Returns a single location by using location_id
 
 #### Middleware
-`restricted()` -> Used for all protected routes and requires a token set in the header under authorization
+`restricted()` => Used for all protected routes and requires a token set in the header under authorization
 
 ## Environment Variables
 
@@ -121,6 +183,10 @@ create a .env file that includes the following:
     *  DB_SECRET - provided by Heroku during deployment
     *  HEROKU_USER - provided by Heroku during deployment
     *  DB_PASSWORD - provided by Heroku during deployment
+    *  LOCAL_PASSWORD - your local postgres password
+    *  LOCAL_USER - your local postgres user
+    *  LOCAL_DB - you will need to create and name a local DB
+    
     
 ## Contributing
 
