@@ -17,7 +17,7 @@ server.use('/connection', connRouter);
 
 server.get('/', (req, res) => {
     res.status(200).json({
-        welcomeMessage: 'Welcome to the Niyon Backend'
+        welcomeMessage: 'Welcome to the auto deployed Niyon Server'
     })
 })
 
