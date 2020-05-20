@@ -7,11 +7,12 @@
   "description": "Niyon Graphql Server",
   "main": "server.js",
   "scripts": {
-    "test": "npx knex migrate:rollback --env test && npx knex migrate:latest --env test && npx knex seed:run --env test &&  cross-env NODE_ENV=test jest --verbose --coverage",
     "server": "nodemon -r dotenv/config server.js",
-    "start": "node server.js"
+    "start": "node server.js",
+    "test": "npx knex migrate:rollback --env test && npx knex migrate:latest --env test && npx knex seed:run --env test &&  cross-env NODE_ENV=test jest --verbose --coverage",
+    "test:force": "jest --detectOpenHandles --forceExit",
+    "coverage": "jest --coverage --detectOpenHandles --forceExit || true"
   },
- 
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Lambda-School-Labs/niyon-be.git"
@@ -39,6 +40,12 @@
     "pg": "^8.0.3"
   },
   "jest": {
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "collectCoverageFrom": [
+      "**/*.js",
+      "!**/node_modules/**",
+      "!**/vendor/**",
+      "!**/__tests__/**"
+    ]
   }
 }
