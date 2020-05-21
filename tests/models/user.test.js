@@ -14,3 +14,11 @@ test("userProfile", async () => {
   const res = await userModel.update;
   expect(res).not.toContainEqual('');
 });
+
+
+describe("GetById is an object export", () => {
+   it("is a module.exports", () => {
+     expect(typeof getById).toBe("object");
+                                
+     });
+   });
