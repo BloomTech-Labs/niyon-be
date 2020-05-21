@@ -1,6 +1,7 @@
 const express = require('express');
 const helpers = require('../../models/index');
 const restricted = require('../../Middleware/restricted');
+const filterUpdate = require('../../Middleware/filterUpdate');
 
 const router = express.Router();
 
@@ -113,6 +114,10 @@ router.get('/:id', restricted(), async (req, res, next) => {
        console.log(e);
        next();
    }
+});
+
+router.post('/:id/:filter',restricted(), filterUpdate(), async (req, res, next) => {
+    console.log('hey you guys')
 });
 
 module.exports = router;
