@@ -1,5 +1,6 @@
 const express = require('express');
 const helmet = require('helmet');
+const cors = require('cors')
 const authRouter = require('./Routers/AuthRouter/AuthRouter');
 const profileRouter = require('./Routers/ProfileRouter/ProfilePackage');
 const connRouter = require('./Routers/ConnectionRouter/ConnectionRouter')
@@ -9,6 +10,7 @@ const PORT = process.env.PORT || 4000;
 
 const server = express();
 
+server.use(cors());
 server.use(express.json());
 server.use(helmet());
 server.use('/auth', authRouter);
