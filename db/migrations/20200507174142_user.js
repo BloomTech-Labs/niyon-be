@@ -56,6 +56,8 @@ exports.up = async function(knex) {
             .inTable('user')
             .onUpdate('CASCADE')
             .onDelete('CASCADE');
+        table.boolean('status').defaultTo(false);
+        table.boolean('rejected').defaultTo(false);
     });
 };
 
