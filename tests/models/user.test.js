@@ -1,5 +1,5 @@
 const userModel = require("../../models/user");
-
+const findById =require('../../models/user')
 test("update", async () => {
   const res = await userModel.update;
   expect(res).not.toContainEqual('');
@@ -18,7 +18,7 @@ test("userProfile", async () => {
 
 describe("GetById is an object export", () => {
    it("is a module.exports", () => {
-     expect(typeof getById).toBe("object");
+     expect(typeof findById).toBe("object");
                                 
      });
    });

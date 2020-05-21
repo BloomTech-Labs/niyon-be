@@ -16,3 +16,4 @@ test("api not working", async () => {
   const res = await supertest(server).get("/:id");
   expect(res.status).toBe(404);
 });
+

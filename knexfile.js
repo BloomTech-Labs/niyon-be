@@ -27,10 +27,8 @@ module.exports = {
     //   }}
   },
   test: {
-    client: "sqlite3",
-    connection: {
-      filename: "./db/testNiyon.db3"
-    },
+    client: "pg",
+    connection:  process.env.LOCAL_CONNECTION_STRING ,
     useNullAsDefault: true,
 
     migrations: {
