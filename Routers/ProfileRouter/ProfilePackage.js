@@ -116,8 +116,27 @@ router.get('/:id', restricted(), async (req, res, next) => {
    }
 });
 
-router.post('/:id/:filter',restricted(), filterUpdate(), async (req, res, next) => {
-    console.log('hey you guys')
+router.post('/:id',restricted(), async (req, res, next) => {
+    try {
+        const user_id = req.params.id;
+        const validateUser = await helpers.user.findById(user_id);
+            if (!validateUser) {
+                res.status(400).json({
+                    errorMessage: 'User ID not found'
+                })
+            }
+        const data = req.body;
+            if (!data) {
+                res.status(400).json({
+                    errorMessage: "No data included in request"
+                })
+            }
+        const update = await helpers.user.update(user_id, data)
+        res.status(201).json(update)
+    } catch (e) {
+        console.log(e)
+        next()
+    }
 });
 
 module.exports = router;
