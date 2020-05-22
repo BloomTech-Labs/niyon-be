@@ -10,7 +10,10 @@ const PORT = process.env.PORT || 4000;
 
 const server = express();
 
-server.use(cors());
+server.use(cors({
+    origin: 'http://localhost',
+    allowedHeaders: ["\"Content-Type\", \"authorization\""]
+}));
 server.use(express.json());
 server.use(helmet());
 server.use('/auth', authRouter);
