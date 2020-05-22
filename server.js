@@ -10,13 +10,15 @@ const PORT = process.env.PORT || 4000;
 
 const server = express();
 
-
+server.use(cors({
+    origin: 'http://localhost',
+    allowedHeaders: ["\"Content-Type\", \"authorization\""]
+}));
 server.use(express.json());
 server.use(helmet());
 server.use('/auth', authRouter);
 server.use('/profile', profileRouter);
 server.use('/connection', connRouter);
-server.use(cors());
 
 server.get('/', (req, res) => {
     res.status(200).json({
