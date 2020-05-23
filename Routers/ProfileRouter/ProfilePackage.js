@@ -87,6 +87,11 @@ router.get('/:id', restricted(), async (req, res, next) => {
    try {
         const user_id = req.params.id;
         const user = await helpers.user.findById(user_id);
+            if (!user) {
+                res.status(404).json({
+                    errorMessage: `User with the id of ${user_id} was not found`
+                })
+            }
         if (!user.job_title_id) {
             user.job_title_id = 1
         }
