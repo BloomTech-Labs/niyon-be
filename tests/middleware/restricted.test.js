@@ -1,6 +1,7 @@
 const restricted = require("../../Middleware/restricted");
 const jwt = require("jsonwebtoken");
 require("dotenv").config();
+
 describe("restricted is a function", () => {
   it("should have a function", () => {
     expect(typeof restricted).toBe("function");
@@ -17,14 +18,14 @@ const user = {
 };
 const token = jwt.sign({ payload: user }, process.env.JWT_SECRET);
 
-describe("token working", () => {
-  it("token working", () => {
+describe("Restricted function is working", () => {
+  it("Restricted working", () => {
     expect(jwt.sign({ payload: user }, process.env.JWT_SECRET)).toBe(token);
   });
 });
 
-describe("Token not working", () => {
-  it("token not working", () => {
+describe("Restricted is not working", () => {
+  it("Restricted is not working", () => {
     expect(!jwt.sign({ payload: user }, process.env.JWT_SECRET)).toBe(!token);
   });
 });
