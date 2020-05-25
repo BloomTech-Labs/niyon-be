@@ -19,16 +19,16 @@ class helperCreator {
         }
     }
     async findById(id) {
-        await db(this.table)
+        return db(this.table)
             .select('*')
             .where('id', id)
             .first();
     }
-    async update(id, data) {
+    update(id, data) {
         try {
-            return await db(this.table).update(data).where({id: id})
+            return db(this.table).update(data).where({id: id})
         } catch (e) {
-            console.log(e)
+            console.log(e.message)
         }
     }
 }
@@ -43,11 +43,11 @@ class techHelperCreator extends helperCreator {
         return db(this.interTable).insert({user_id: userID, tech_id: techID})
     }
     async userTech(id) {
-        return db(this.interTable)
-            .join(this.joinTable, this.joinTable['id'], this.interTable['user_id'])
-            .join(this.table, this.table['id'], this.interTable['tech_id'])
-            .where(this.joinTable['id'], id)
-            .select(this.table['id'],this.table['name'], this.table['type'])
+        return db('user_tech as ut')
+            .join("user as u", "u.id", "ut.user_id")
+            .join("tech as t", "t.id", "ut.tech_id")
+            .where("u.id", id)
+            .select("t.name", "t.type", "t.id")
     }
 }
 
@@ -74,5 +74,8 @@ const locationHelper = new helperCreator('location');
 const techHelper = new techHelperCreator('tech', 'user', 'user_tech')
 
 module.exports = {
-    userHelper
+    userHelper,
+    jobHelper,
+    locationHelper,
+    techHelper
 }
