@@ -1,5 +1,5 @@
 const express = require('express');
-const helpers = require('../../models/user');
+const { userHelper } = require('../../models/classHelpers');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -14,22 +14,16 @@ router.post('/register', async (req, res, next) => {
                 })
             }
         // checking entered email to make sure it is not already registered
-        const user = await helpers.findBy({email});
+        const user = await userHelper.findBy({email});
             if (user) {
                 return res.status(409).json({
                     errorMessage: `${email} is already registered`
                 })
             }
         // creating a new user with entered input and a hashed password
-        const newUser = await helpers.createUser(req.body);
+        const newUser = await userHelper.createUser(req.body);
             // deleting password to return to client for security
             delete newUser.password
-            // deleting null fields from user to return to client
-            delete newUser.first_name
-            delete newUser.last_name
-            delete newUser.bio
-            delete newUser.job_title_id
-            delete newUser.location_id
         // creating a token and sending by newly created user
         const token = jwt.sign({payload: newUser}, process.env['JWT_SECRET']);
         // sending back newly created user with auto ID
@@ -49,7 +43,7 @@ router.post('/login', async (req, res, next) => {
         const { email } = req.body;
         const { password } = req.body;
         // checking entered email to make sure user exists
-        const authUser = await helpers.findBy({email});
+        const authUser = await userHelper.findBy({email})
             if(!authUser) {
                 res.status(409).json({
                     errorMessage: `${email} is not registered`
