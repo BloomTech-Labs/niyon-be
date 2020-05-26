@@ -8,14 +8,6 @@ const user = {
 const id = 1;
 const token = jwt.sign({ payload: user }, process.env.JWT_SECRET);
 
-const newProfile = {
-   first_name: 'Test',
-   last_name: 'Test',
-   job_title: 34,
-   location_id: 12,
-   techs: [3, 2, 5, 23],
-   bio: 'test'
-}
 beforeAll((done) => {
   //sets the user from seeds
   supertest(server)
@@ -25,7 +17,6 @@ beforeAll((done) => {
   done();
 });
 
-
 afterAll(async () => {
   await db.destroy();
 });
@@ -34,17 +25,8 @@ test("packageProfile authorized", async () => {
   const res = await supertest(server)
     .get("/profile/profilePackage")
     .set("authorization", token);
-    expect(res.status).toBe(200)
-   
-  });
-
-test("profilePackage:Id authorized", async () => {
-   const res = await supertest(server)
-   .post("/profilePackage/1")
-   .set("authorization", token)
-   expect(res.status).toBe(404);
+  expect(res.status).toBe(200);
 });
-
 
 test("profile:id not authorized, expect 401", async () => {
   const res = await supertest(server).get(`/profile/1`);
@@ -59,9 +41,9 @@ test("Test user profile/:id working", async () => {
   expect(res.type).toBe("application/json");
 });
 
-test('post profile/;id', async()=>{
-   const res = await supertest(server)
-   .post('/profile/1')
-   .set("authorization", token)
-   expect(res.status).toBe(201)
-})
+test("post profile/;id", async () => {
+  const res = await supertest(server)
+    .post("/profile/1")
+    .set("authorization", token);
+  expect(res.status).toBe(201);
+});
