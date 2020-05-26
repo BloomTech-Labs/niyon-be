@@ -34,8 +34,9 @@ To get the server running locally:
 | Method | Endpoint                | Access Control      | Description                                        |
 | ------ | ----------------------- | ------------------- | -------------------------------------------------- |
 | GET    |`/profile/profilePackage`| requires token      | Returns all data to complete profile set up        |
+| GET    |`/profile`               | requires token      | Returns all users with data                        |
 | GET    |`/profile/:id`           | requires token      | Returns data for user by ID                        |
-| PUT    |`/profile/profilePackage/:id`| requires token      | Data needs to adhere to model below to update profile|
+| POST    |`/profile/:id`          | requires token      | Data fields need to be named as below, none are required|
 # Data Model
 
 #### Registration Example
@@ -92,9 +93,9 @@ set headers: authorization === token recieved during registration or login
  jobs: [{ id / job_title }] 27 objs
 }
 
-PUT profilePackage/:id: 
+POST profile/:id: 
 
-User Input, all fields required: 
+User Input, none are required: 
 {
     techs: [3, 2, 5, 23] => array of tech_id's
     location_id: 12 => ID for location
@@ -103,7 +104,7 @@ User Input, all fields required:
     last_name: STRING! => last name of user
     bio: STRING! => small blurb about user
 }
-Return stucture for PUT by id is the same as GET by id listed below 
+Return stucture for POST by id is the same as GET / GET by id listed below 
 
 GET user by id returned data stucture example:
 {
