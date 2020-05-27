@@ -41,9 +41,10 @@ test("Test user profile/:id working", async () => {
   expect(res.type).toBe("application/json");
 });
 
-test("post profile/;id", async () => {
+test("post profile/:id", async () => {
   const res = await supertest(server)
     .post("/profile/1")
-    .set("authorization", token);
+    .set("authorization", token)
+    .send({bio: 'test'})
   expect(res.status).toBe(201);
 });
