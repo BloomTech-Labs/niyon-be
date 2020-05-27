@@ -68,14 +68,37 @@ class userHelperCreator extends helperCreator {
     }
 }
 
+class connectionHelper extends helperCreator{
+    constructor(table) {
+        super(table);
+    }
+    async updateConnection(mentor_id, mentee_id) {
+      return db(this.table).insert({userReq: mentee_id, userAcc: mentor_id})
+    };
+    async requestConnection(id) {
+        return db('user_connections as ut')
+            .where("ut.userAcc",id)
+            .select("*")
+    }
+    responseConnection(userAcc, userReq, data) {
+        try {
+            return db(this.table).update(data).where({userAcc: userAcc, userReq: userReq})
+        } catch (e) {
+            console.log(e.message)
+        }
+    }
+}
+
 const userHelper = new userHelperCreator('user');
 const jobHelper = new helperCreator('job_title');
 const locationHelper = new helperCreator('location');
+const connectHelper = new connectionHelper('user_connections')
 const techHelper = new techHelperCreator('tech', 'user', 'user_tech')
 
 module.exports = {
     userHelper,
     jobHelper,
     locationHelper,
-    techHelper
+    techHelper,
+    connectHelper
 }
