@@ -17,7 +17,7 @@ test("create a user", async () => {
 
 test("login user", async () => {
   const res = await supertest(server)
-    .post("/auth/login") //testing the route
+    .post("https://niyon-testing.herokuapp.com/auth/login") //testing the route
     .send({ email: "test@gmail.com", password: "test1232" }); //testing email password
   expect(res.status).toBe(200); //testing the status code to be 200
   expect(res.type).toBe("application/json"); //test the data coming back
