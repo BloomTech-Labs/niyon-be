@@ -28,7 +28,7 @@ module.exports = {
   },
   test: {
     client: "pg",
-    connection: process.env.DATABASE_URL,
+    connection: process.env.HEROKU_POSTGRESQL_ONYX_URL,
     migrations: {
       directory: "./db/migrations"
     },
@@ -43,7 +43,7 @@ module.exports = {
 
   prod: {
     client: "pg",
-    connection: process.env.HEROKU_POSTGRESQL_ONYX_URL,
+    connection: process.env.DATABASE_URL,
     migrations: {
       directory: "./db/migrations"
     },
