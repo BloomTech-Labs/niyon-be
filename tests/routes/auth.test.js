@@ -8,7 +8,7 @@ afterAll(async () => {
 
 test("create a user", async () => {
   const res = await supertest(server)
-    .post("/auth/register") //checks the route
+    .post("https://niyon-testing.herokuapp.com/auth/login/auth/register") //checks the route
     .send({ email: "test@gmail.com", password: "test1232" }); //test the info being sent
   expect(res.status).toBe(201); //test the status to be 201
   expect(res.type).toBe("application/json"); //test the data coming back
@@ -26,7 +26,7 @@ test("login user", async () => {
 
 test("login try with no email", async () => {
   const res = await supertest(server)
-    .post("/auth/register") //testing route
+    .post("https://niyon-testing.herokuapp.com/auth/login") //testing route
     .send({ email: "", password: "password1" }); //testing without email
   expect(res.status).toBe(400); //testing to see if 404 comes back
 });
