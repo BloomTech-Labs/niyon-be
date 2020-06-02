@@ -3,10 +3,8 @@ name: build
 # What conditions trigger the workflow
 #  In this case, all pushes and pull requests
 on:
-  pull_request:
-  push:
-    branches:
-      - master
+ [push, pull_request]
+ 
 # The jobs that will be run, usually in parallel
 jobs:
   # A job to generate and publish code coverage
@@ -33,6 +31,6 @@ jobs:
           # Run our `coverage` script in our `package.json`
           coverageCommand: npm run test
           # By default, this looks for a `coverage` folder in the root of your project, but you may need to change this
-          coverageLocations: "./coverage/clover.xml:clover"
+          coverageLocations: "./niyon-be/coverage/lcov.info:lcov"
           # Great for troubleshooting
           debug: true
