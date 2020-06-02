@@ -9,8 +9,7 @@
   "scripts": {
     "server": "nodemon -r dotenv/config server.js",
     "start": "node server.js",
-    "test": "npx knex migrate:rollback --env test && npx knex migrate:latest --env test && npx knex seed:run --env test  &&  cross-env NODE_ENV=test jest --verbose  --coverage",
-    "test:force": "jest --detectOpenHandles --forceExit",
+    "test": "heroku run knex migrate:rollback -a niyon-app && heroku run knex migrate:latest  -a niyon-app && heroku run knex seed:run  -a niyon-app && cross-env NODE_ENV=test jest --verbose  --coverage",
     "coverage": "jest --coverage --detectOpenHandles --forceExit || true"
   },
   "repository": {
