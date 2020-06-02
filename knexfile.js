@@ -29,6 +29,7 @@ module.exports = {
   test: {
     client: "pg",
     connection: process.env.HEROKU_POSTGRESQL_ONYX_URL,
+    useNullAsDefault: true,
     migrations: {
       directory: "./db/migrations"
     },
