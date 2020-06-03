@@ -1,59 +1,43 @@
 require("dotenv").config();
 
 module.exports = {
-  // connection: 'postgres://joe:123@localhost/graphqlknex',
   dev: {
     client: "pg",
     connection: {
-      database: process.env.LOCAL_DB, //process.env["LOCAL_DB "],
-      user: process.env.LOCAL_USER, //process.env["LOCAL_USER "],
-      password: process.env.LOCAL_PASSWORD, //process.env["LOCAL_PASSWORD "],
-      port: 5432
-      // connection: {
-      //   //process.env["LOCAL_PASSWORD"], //filename: './db/data.db3', // need to create db
-      // },
+      database: process.env.LOCAL_DB,
+      user: process.env.LOCAL_USER,
+      password: process.env.LOCAL_PASSWORD,
+      port: 5432,
     },
     useNullAsDefault: true,
 
     migrations: {
-      directory: "./db/migrations"
+      directory: "./db/migrations",
     },
     seeds: {
-      directory: "./db/seeds"
-    }
-    // pool: {
-    //   afterCreate: (conn, done) => {
-    //     conn.run("PRAGMA foreign_keys = ON", done)
-    //   }}
+      directory: "./db/seeds",
+    },
   },
   test: {
     client: "pg",
-    connection: process.env.HEROKU_POSTGRESQL_ONYX_URL,
-    useNullAsDefault: true,
-    migrations: {
-      directory: "./db/migrations"
-    },
+    connection: process.env.LOCAL_CONNECTION_STRING,
+
     seeds: {
-      directory: "./db/test/seeds"
-    }
+      directory: "./db/test/seeds",
+    },
+    migrations: {
+      directory: "./db/migrations",
+    },
   },
-  // pool: {
-  //   afterCreate: (conn, done) => {
-  //     conn.run("PRAGMA foreign_keys = ON", done)
-  //   }}
 
   prod: {
     client: "pg",
     connection: process.env.DATABASE_URL,
     migrations: {
-      directory: "./db/migrations"
+      directory: "./db/migrations",
     },
     seeds: {
-      directory: "./db/seeds"
-    }
-    // pool: {
-    //   afterCreate: (conn, done) => {
-    //     conn.run("PRAGMA foreign_keys = ON", done)
-    //   }}
-  }
+      directory: "./db/seeds",
+    },
+  },
 };
