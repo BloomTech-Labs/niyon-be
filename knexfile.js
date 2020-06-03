@@ -20,7 +20,12 @@ module.exports = {
   },
   test: {
     client: "pg",
-    connection: "postgres://lqtdmycffkmufv:e5cd313f3acb6780ddf83a3dffe9eee55d27b3fefc57163f8b559401b6418c8f@ec2-18-210-214-86.compute-1.amazonaws.com:5432/d8jg2nh2jskl47",
+    connection: {
+      database: "ec2-18-210-214-86.compute-1.amazonaws.com",
+      user: "lqtdmycffkmufv",
+      password: "e5cd313f3acb6780ddf83a3dffe9eee55d27b3fefc57163f8b559401b6418c8f",
+      port: 5432,
+    },
 
     seeds: {
       directory: "./db/test/seeds",
