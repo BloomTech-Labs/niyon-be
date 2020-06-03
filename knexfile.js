@@ -20,7 +20,7 @@ module.exports = {
   },
   test: {
     client: "pg",
-    connection: process.env.LOCAL_CONNECTION_STRING,
+    connection: process.env.HEROKU_POSTGRESQL_ONYX_URL,
 
     seeds: {
       directory: "./db/test/seeds",
