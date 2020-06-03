@@ -32,6 +32,6 @@ jobs:
           # Run our `coverage` script in our `package.json`
           coverageCommand: npm run test
           # By default, this looks for a `coverage` folder in the root of your project, but you may need to change this
-          # coverageLocations: "HEROKU_POSTGRESQL_ONYX_URL"
+          coverageLocations: "HEROKU_POSTGRESQL_ONYX_URL"
           # Great for troubleshooting
           debug: true
