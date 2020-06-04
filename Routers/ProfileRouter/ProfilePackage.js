@@ -80,12 +80,15 @@ router.get('/:id', restricted(), async (req, res, next) => {
         }
         const location = await locationHelper.findById(user.location_id);
         const techs = await techHelper.userTech(user.id);
+        const tech_id = techs.map(arr => {
+            return arr.id
+        })
 
         const returnedUser = {
             ...user,
             job_title: job.job_title,
             location: location.location,
-            tech_stack: techs,
+            tech_stack: tech_id,
         }
 
         // deleting password from return object to client for security reasons
