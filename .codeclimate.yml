@@ -19,3 +19,6 @@ exclude_patterns:
   - "**/*.spec.tsx"
   - "**/vendor/"
   - "**/node_modules/"
+  - "**/db/migrations"
+  - "**/db/seeds"
+  - "**/db/test/seeds"
