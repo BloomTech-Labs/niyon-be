@@ -1,5 +1,5 @@
 {
-  "name": "niyon-be",
+  "name": "Niyon-be",
   "version": "1.0.0",
   "engine": {
     "node": "14.3.0"
@@ -9,10 +9,9 @@
   "scripts": {
     "server": "nodemon -r dotenv/config server.js",
     "start": "node server.js",
-    "test": "heroku run knex migrate:latest -a niyon-app -- --env=test && heroku run knex seed:run -a niyon-app -- --env=test && cross-env NODE_ENV=test jest --verbose  && coverage",
-    "coverage": "heroku run knex migrate:rollback -a niyon-app -- --env=test && heroku run knex migrate:latest -a niyon-app -- --env=test && heroku run knex seed:run -a niyon-app -- --env=test && cross-env NODE_ENV=test jest --verbose  --coverage",
-    "fake": "cross-env NODE_ENV=test jest --coverage --detectOpenHandles --forceExit || true --debug",
-    "testing:coverage": "cross-env NODE_ENV=test jest --watchAll --verbose --runInBand --coverage"
+
+    "test": "heroku run knex migrate:rollback -a niyon-app -- --env=test && heroku run knex migrate:latest -a niyon-app -- --env=test && heroku run knex seed:run -a niyon-app -- --env=test && cross-env NODE_ENV=test jest --verbose  --coverage",
+    "coverage": "jest --coverage --detectOpenHandles --forceExit || true"
   },
   "repository": {
     "type": "git",
