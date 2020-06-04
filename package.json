@@ -11,7 +11,8 @@
     "start": "node server.js",
     "test": "heroku run knex migrate:latest -a niyon-app -- --env=test && heroku run knex seed:run -a niyon-app -- --env=test && cross-env NODE_ENV=test jest --verbose  && coverage",
     "coverage": "heroku run knex migrate:rollback -a niyon-app -- --env=test && heroku run knex migrate:latest -a niyon-app -- --env=test && heroku run knex seed:run -a niyon-app -- --env=test && cross-env NODE_ENV=test jest --verbose  --coverage",
-    "fake": "cross-env NODE_ENV=test jest --coverage --detectOpenHandles --forceExit || true --debug"
+    "fake": "cross-env NODE_ENV=test jest --coverage --detectOpenHandles --forceExit || true --debug",
+    "testing:coverage": "cross-env NODE_ENV=test jest --watchAll --verbose --runInBand --coverage"
   },
   "repository": {
     "type": "git",
