@@ -29,6 +29,7 @@ jobs:
           CC_TEST_REPORTER_ID: ${{ secrets.CodeClimateReporterId }}
           JWT_SECRET: ${{ secrets.JWT_SECRET }} 
           HEROKU_POSTGRESQL_ONYX_URL: ${{ secrets.HEROKU_POSTGRESQL_ONYX_URL }} 
+          NODE_ENV: test 
           CI: true
         with:
           # Run our `coverage` script in our `package.json`
