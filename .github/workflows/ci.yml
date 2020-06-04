@@ -3,10 +3,8 @@ name: build
 # What conditions trigger the workflow
 #  In this case, all pushes and pull requests
 on:
-  pull_request:
-  push:
-    branches:
-      - master
+ [push, pull_request]
+ 
 # The jobs that will be run, usually in parallel
 jobs:
   # A job to generate and publish code coverage
@@ -29,10 +27,14 @@ jobs:
         env:
           # An environment variable, the value is a GitHub repo secret
           CC_TEST_REPORTER_ID: ${{ secrets.CodeClimateReporterId }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }} 
+          HEROKU_POSTGRESQL_ONYX_URL: ${{ secrets.HEROKU_POSTGRESQL_ONYX_URL }} 
+          NODE_ENV: test 
+          CI: true
         with:
           # Run our `coverage` script in our `package.json`
-          coverageCommand: npm run test
+          coverageCommand: npm run testing:coverage
           # By default, this looks for a `coverage` folder in the root of your project, but you may need to change this
-          coverageLocations: "./coverage/clover.xml:clover"
+          coverageLocations: "HEROKU_POSTGRESQL_ONYX_URL"
           # Great for troubleshooting
           debug: true
