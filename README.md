@@ -1,4 +1,7 @@
+
 # API Documentation
+[![NODE](https://api.codeclimate.com/v1/badges/ffa4ba51a7b62eedeeb5/maintainability)](https://codeclimate.com/github/Lambda-School-Labs/niyon-be)
+[![NODE](https://api.codeclimate.com/v1/badges/ffa4ba51a7b62eedeeb5/test_coverage)](https://codeclimate.com/github/Lambda-School-Labs/niyon-be)
 #### Deployed Base URL:
 https://niyon-app.herokuapp.com
 
@@ -118,23 +121,7 @@ GET user by id returned data stucture example:
     location_id: 6
     job_title: "Junior Front End Developer"
     location: "Yamoussoukro, Ivory Coast"
-    tech_stack: [
-            {
-              "name": "JavaScript",
-              "type": "Language",
-              "id": 3
-            },
-            {
-              "name": "Figma",
-              "type": "Soft",
-              "id": 22
-            },
-            {
-              "name": "React",
-              "type": "Framework",
-              "id": 18
-            }
-          ]
+    techs: [4, 9, 23, 7] <= array of id's pointing to techs
     }
 ```
 
