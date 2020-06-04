@@ -1,5 +1,5 @@
 {
-  "name": "Niyon-be",
+  "name": "niyon-be",
   "version": "1.0.0",
   "engine": {
     "node": "14.3.0"
@@ -9,9 +9,8 @@
   "scripts": {
     "server": "nodemon -r dotenv/config server.js",
     "start": "node server.js",
-
     "test": "heroku run knex migrate:rollback -a niyon-app -- --env=test && heroku run knex migrate:latest -a niyon-app -- --env=test && heroku run knex seed:run -a niyon-app -- --env=test && cross-env NODE_ENV=test jest --verbose  --coverage",
-    "coverage": "jest --coverage --detectOpenHandles --forceExit || true"
+    "coverage": "npx knex migrate:rollback --env test && npx knex migrate:latest --env test && npx knex seed:run --env test && cross-env NODE_ENV=test && jest --coverage --detectOpenHandles --forceExit || true"
   },
   "repository": {
     "type": "git",
@@ -27,7 +26,7 @@
     "dotenv": "^8.2.0",
     "jest": "^26.0.1",
     "nodemon": "^2.0.3",
-    "sqlite": "^4.0.7",
+    "sqlite": "^4.0.10",
     "supertest": "^4.0.2"
   },
   "dependencies": {
@@ -38,7 +37,8 @@
     "helmet": "^3.22.0",
     "jsonwebtoken": "^8.5.1",
     "knex": "^0.21.1",
-    "pg": "^8.0.3"
+    "pg": "^8.0.3",
+    "sqlite3": "^4.2.0"
   },
   "jest": {
     "testEnvironment": "node",

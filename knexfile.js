@@ -19,8 +19,12 @@ module.exports = {
     },
   },
   test: {
-    client: "pg",
-    connection: "process.env.HEROKU_POSTGRESQL_ONYX_URL",
+    client: "sqlite3",
+    connection: {
+      filename: './db/niyon.db3'
+
+    },
+    useNullAsDefault: true,
 
     seeds: {
       directory: "./db/test/seeds",
