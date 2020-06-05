@@ -1,6 +1,5 @@
 const express = require('express');
 const { userHelper, jobHelper, locationHelper, techHelper } = require('../../models/classHelpers');
-const helpers = require('../../models/index');
 const restricted = require('../../Middleware/restricted');
 
 
@@ -8,9 +7,9 @@ const router = express.Router();
 
 router.get('/profilePackage',restricted(), async (req, res, next) => {
     try {
-        const tech = await helpers.tech.getTech();
-        const location = await helpers.location.getLocations();
-        const jobs = await helpers.job_title.getTitles();
+        const tech = await techHelper.getAll();
+        const location = await locationHelper.getAll();
+        const jobs = await jobHelper.getAll();
 
         const profile_starter = {
             tech,
