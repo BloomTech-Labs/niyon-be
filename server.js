@@ -3,7 +3,8 @@ const helmet = require('helmet');
 const cors = require('cors')
 const authRouter = require('./Routers/AuthRouter/AuthRouter');
 const profileRouter = require('./Routers/ProfileRouter/ProfilePackage');
-const connRouter = require('./Routers/ConnectionRouter/ConnectionRouter')
+const connRouter = require('./Routers/ConnectionRouter/ConnectionRouter');
+const newsRouter = require('./Routers/NewsRouter/NewsRouter')
 require("dotenv").config();
 
 const PORT = process.env.PORT || 4000;
@@ -16,6 +17,7 @@ server.use(helmet());
 server.use('/auth', authRouter);
 server.use('/profile', profileRouter);
 server.use('/connection', connRouter);
+server.use('/news', newsRouter);
 
 server.get('/', (req, res) => {
     res.status(200).json({
