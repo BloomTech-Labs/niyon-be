@@ -1,5 +1,5 @@
 const express = require('express');
-const { userHelper } = require('../../models/classHelpers');
+const { userHelper, connectHelper } = require('../../models/classHelpers');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -54,6 +54,21 @@ router.post('/login', async (req, res, next) => {
                     res.status(401).json({
                         errorMessage: 'Invalid Password'
                     })}
+        const newConnections = await connectHelper.newConnections(authUser.id)
+        let reqProfiles = []
+       async function userRequest(arr) {
+        try {
+            const profiles = await userHelper.newConnectionProfiles(arr)
+            reqProfiles.push(profiles)
+            } catch (e) {
+                console.log(e)
+            }
+       }
+
+       const getData = async () => {
+            return Promise.all(newConnections.map(arr => userRequest(arr.userReq)))
+       }
+
         const payload = {
                     user_id: authUser.id,
                     email: authUser.email,
@@ -64,10 +79,13 @@ router.post('/login', async (req, res, next) => {
         const token = jwt.sign(payload, process.env['JWT_SECRET']);
         // returning the logged in user ( id / email / user_type )
        // also sending back token to be used in the headers under (authorization) for protected routes
-        return res.json({
+       getData().then(data => {
+          return res.json({
             token: token,
-            user: payload
+            user: payload,
+            new_connection_requests: reqProfiles
         })
+       })
    } catch (e) {
        console.log(e);
        next();

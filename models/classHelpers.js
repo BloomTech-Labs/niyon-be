@@ -66,13 +66,19 @@ class userHelperCreator extends helperCreator {
             .where('email', email)
             .first();
     }
+    newConnectionProfiles(id) {
+        return db(this.table)
+            .select('id', 'first_name', 'last_name', 'bio')
+            .where('id', id)
+            .first();
+    }
 }
 
 class connectionHelper extends helperCreator{
     constructor(table) {
         super(table);
     }
-    async updateConnection(mentor_id, mentee_id) {
+    async updateConnection(mentee_id, mentor_id) {
       return db(this.table).insert({userReq: mentee_id, userAcc: mentor_id})
     };
     async requestConnection(id) {
@@ -83,6 +89,13 @@ class connectionHelper extends helperCreator{
     responseConnection(userAcc, userReq, data) {
         try {
             return db(this.table).update(data).where({userAcc: userAcc, userReq: userReq})
+        } catch (e) {
+            console.log(e.message)
+        }
+    }
+    newConnections(id) {
+        try {
+            return db(this.table).where('userAcc', id).where('status', false).select("*")
         } catch (e) {
             console.log(e.message)
         }
