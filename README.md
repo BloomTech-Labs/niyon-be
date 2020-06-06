@@ -2,6 +2,7 @@
 # API Documentation
 [![NODE](https://api.codeclimate.com/v1/badges/ffa4ba51a7b62eedeeb5/maintainability)](https://codeclimate.com/github/Lambda-School-Labs/niyon-be)
 [![NODE](https://api.codeclimate.com/v1/badges/ffa4ba51a7b62eedeeb5/test_coverage)](https://codeclimate.com/github/Lambda-School-Labs/niyon-be)
+[![api](https://img.shields.io/badge/API%20Enpoint%20Docs-Postman-orange)](https://documenter.getpostman.com/view/11642550/SztK1jMA?version=latest)
 #### Deployed Base URL:
 https://niyon-app.herokuapp.com
 
