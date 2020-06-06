@@ -48,3 +48,11 @@ test("post profile/:id", async () => {
     .send({bio: 'test'})
   expect(res.status).toBe(201);
 });
+
+test('testing get for profile', async () =>{
+  const res = await supertest(server)
+  .get('/profile/')
+  .set('authorization', token)
+  expect(res.status).toBe(200)
+  expect(res.body[1].first_name).toBe('tawne')
+})
