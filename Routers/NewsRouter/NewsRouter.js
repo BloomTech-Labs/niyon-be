@@ -7,12 +7,11 @@ const router = express.Router()
 
 router.get('/', restricted(), async (req, res, next) => {
        try {
-    const date = moment().format("YYYY-MM");
     let data = []
-    const url = `http://newsapi.org/v2/top-headLines?category=technology&from=${date}sortBy=popularity&apiKey=${process.env.NEWS_API_KEY}`
+       const url = 'https://dev.to/api/articles'
        await axios.get(url)
            .then(res => {
-               res.data.articles.map(arr => {
+               res.data.map(arr => {
                    data.push(arr)
                })
            })
@@ -34,13 +33,13 @@ router.get('/', restricted(), async (req, res, next) => {
 
 router.get('/:topic', restricted(), async (req, res, next) => {
    try {
-    const date = moment().format("YYYY-MM");
+
     const { topic } = req.params
     let data = []
-    const url = `http://newsapi.org/v2/everything?q=${topic}&from=${date}sortBy=popularity&apiKey=${process.env.NEWS_API_KEY}`
+   const url = `https://dev.to/api/articles?tag=${topic}`
        await axios.get(url)
            .then(res => {
-               res.data.articles.map(arr => {
+               res.data.map(arr => {
                    data.push(arr)
                })
            })

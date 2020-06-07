@@ -1,5 +1,5 @@
 const express = require('express');
-const { userHelper, connectHelper } = require('../../models/classHelpers');
+const { userHelper, connectHelper, jobHelper, locationHelper } = require('../../models/classHelpers');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 
@@ -58,8 +58,22 @@ router.post('/login', async (req, res, next) => {
         let reqProfiles = []
        async function userRequest(arr) {
         try {
-            const profiles = await userHelper.newConnectionProfiles(arr)
+            let profiles = await userHelper.newConnectionProfiles(arr)
+                if (!profiles.job_title_id) {
+                    profiles.job_title_id = 1
+                }
+                    const job = await jobHelper.findById(profiles.job_title_id)
+                if (!profiles.location_id) {
+                    profiles.location_id = 1
+                }
+                const location = await locationHelper.findById(profiles.location_id)
+            profiles = {
+                ...profiles,
+                location: location.location,
+                job_title: job.job_title
+            }
             reqProfiles.push(profiles)
+            console.log(reqProfiles)
             } catch (e) {
                 console.log(e)
             }

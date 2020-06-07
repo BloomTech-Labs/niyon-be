@@ -68,7 +68,15 @@ class userHelperCreator extends helperCreator {
     }
     newConnectionProfiles(id) {
         return db(this.table)
-            .select('id', 'first_name', 'last_name', 'bio')
+            .select(
+                'id',
+                'first_name',
+                'last_name',
+                'bio',
+                'user_type',
+                'location_id',
+                'job_title_id'
+            )
             .where('id', id)
             .first();
     }
