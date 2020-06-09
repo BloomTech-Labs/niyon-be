@@ -36,14 +36,17 @@ router.get('/', restricted(), async (req, res, next) => {
             }
             const job = await jobHelper.findById(arr.job_title_id);
             const location = await locationHelper.findById(arr.location_id);
-            const techs = await techHelper.userTech(arr.id);
+            const tech_stack = await techHelper.userTech(arr.id);
             delete arr.password;
+            const tech_id =  tech_stack.map(arr => {
+                return arr.id
+            })
 
             return {
                 ...arr,
                 job: job.job_title,
                 location: location.location,
-                tech_stack: techs
+                techs: tech_id
             }
         } catch (e) {
             console.log(e)
