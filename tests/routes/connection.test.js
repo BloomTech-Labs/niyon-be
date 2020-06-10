@@ -5,14 +5,15 @@ const jwt = require("jsonwebtoken");
 const user = {
    id: 1,
  };
- const id = 1;
+ 
  const token = jwt.sign({ payload: user }, process.env.JWT_SECRET);
  
  beforeAll((done) => {
    //sets the user from seeds
    supertest(server)
      .post("/auth/login")
-     .send({ email: "joe1@gmail.com", password: "123" })
+     .send({ email: "joe1@gmail.com", password: "123" } )
+
      .set("authorization", token);
    done();
  });
@@ -20,11 +21,17 @@ const user = {
  afterAll(async () => {
    await db.destroy();
  });
- 
- test("Connection test not working", async () => {
+
+ test("Connection request working", async () => {
+  
    const res = await supertest(server)
-     .post('/response/:id')
+     .post('/connection/response/1')
+     .send({userReq: 1, userAcc: 2, status: true , rejected: false})
      .set("authorization", token)
-     .send({user_id: 1})
-   expect(res.status).toBe(404);
+   expect(res.status).toBe(201);
  });
+const requestConnection = {
+   mentor_id: 1,
+   mentee_id: 2,
+}
+ 
