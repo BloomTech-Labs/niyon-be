@@ -15,6 +15,7 @@ router.post('/request/:id', restricted(), async (req, res, next) => {
 router.post('/response/:id', restricted(), async (req, res, next) => {
     const user_id = req.params.id;
     const { status, rejected, userReq } = req.body;
+
         if (status === true) {
             const accepted = await connectHelper.responseConnection(user_id, userReq, {
                 status: true,

@@ -108,6 +108,13 @@ class connectionHelper extends helperCreator{
             console.log(e.message)
         }
     }
+    myConnections(id) {
+        try {
+            return db(this.table).where('userAcc', id).where('status', true).select("userReq")
+        } catch (e) {
+            console.log(e.message)
+        }
+    }
 }
 
 const userHelper = new userHelperCreator('user');
