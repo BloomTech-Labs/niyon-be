@@ -33,3 +33,14 @@ test("Testing the news ", async () => {
   expect(res.length).not.toBe(0)
 });
 
+test('testing the news topic route',async ()=>{
+  const resLocal = await supertest(server)
+  .get('/topic')
+  .set("authorization", token)
+  const topic = [{ topic: 'This is a test topic'}]
+  const asyncMock = jest.fn().mockResolvedValue(topic)
+  const res = await asyncMock()
+  expect(res).toEqual(topic)
+  console.log(res)
+  expect(res).not.toBe(0)
+})
