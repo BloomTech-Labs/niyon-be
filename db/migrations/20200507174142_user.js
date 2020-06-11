@@ -58,6 +58,7 @@ exports.up = async function(knex) {
             .onDelete('CASCADE');
         table.boolean('status').defaultTo(false);
         table.boolean('rejected').defaultTo(false);
+        table.primary(['userReq', 'userAcc'])
     });
 };
 

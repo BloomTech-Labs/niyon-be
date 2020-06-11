@@ -1,6 +1,7 @@
 const express = require('express');
 const { userHelper, jobHelper, locationHelper, techHelper, connectHelper } = require('../../models/classHelpers');
 const restricted = require('../../Middleware/restricted');
+const decoder = require('jwt-decode')
 
 
 const router = express.Router();
@@ -25,8 +26,12 @@ router.get('/profilePackage',restricted(), async (req, res, next) => {
 
 router.get('/', restricted(), async (req, res, next) => {
    try {
+       const token = req.headers.authorization;
+       const tokenAuth = decoder(token);
+
     const allUsers = await userHelper.getAll();
     async function userData(arr) {
+
         try {
             if (!arr.job_title_id) {
                 arr.job_title_id = 1
@@ -86,19 +91,41 @@ router.get('/:id', restricted(), async (req, res, next) => {
             return arr.id
         })
        const myConns = await connectHelper.myConnections(user.id)
+       const myRequests = await connectHelper.newConnections(user.id)
 
        async function connData(arr) {
-            console.log(arr.userReq)
-           let connProfile;
+            let connProfile
            try {
-               return connProfile = await userHelper.findById(arr.userReq)
+               connProfile = await userHelper.findById(arr.userReq)
+               delete connProfile.password
+               return connProfile
+           } catch (e) {
+               console.log(e)
+           }
+       }
+
+        async function connRequest(arr) {
+            let connRequest
+           try {
+               connRequest = await userHelper.findById(arr)
+               delete connRequest.password
+               if (connRequest.rejected === true) {
+                   delete {connRequest}
+               } else {
+                   return connRequest
+               }
            } catch (e) {
                console.log(e)
            }
        }
 
        const getData = async () => {
-            return Promise.all(myConns.map(arr => connData(arr)))
+           const myConnProfiles = await Promise.all(myConns.map(arr => connData(arr)));
+           const myConnRequest = await Promise.all(myRequests.map(arr => connRequest(arr.userReq)));
+           return {
+                myConnProfiles,
+                myConnRequest
+           }
        }
 
        delete user.password
@@ -108,20 +135,10 @@ router.get('/:id', restricted(), async (req, res, next) => {
                 job_title: job.job_title,
                 location: location.location,
                 techs: tech_id,
-                myConnections: data
+                myConnections: data.myConnProfiles,
+                myRequests: data.myConnRequest
            })
        })
-        // const returnedUser = {
-        //     ...user,
-        //     job_title: job.job_title,
-        //     location: location.location,
-        //     techs: tech_id,
-        //     myConnections: connections
-        // }
-
-        // deleting password from return object to client for security reasons
-       //  delete returnedUser.password
-       // return res.status(200).json(returnedUser)
    } catch (e) {
        console.log(e);
        next();

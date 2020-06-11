@@ -54,34 +54,6 @@ router.post('/login', async (req, res, next) => {
                     res.status(401).json({
                         errorMessage: 'Invalid Password'
                     })}
-        const newConnections = await connectHelper.newConnections(authUser.id)
-        let reqProfiles = []
-       async function userRequest(arr) {
-        try {
-            let profiles = await userHelper.newConnectionProfiles(arr)
-                if (!profiles.job_title_id) {
-                    profiles.job_title_id = 1
-                }
-                    const job = await jobHelper.findById(profiles.job_title_id)
-                if (!profiles.location_id) {
-                    profiles.location_id = 1
-                }
-                const location = await locationHelper.findById(profiles.location_id)
-            profiles = {
-                ...profiles,
-                location: location.location,
-                job_title: job.job_title
-            }
-            reqProfiles.push(profiles)
-            console.log(reqProfiles)
-            } catch (e) {
-                console.log(e)
-            }
-       }
-
-       const getData = async () => {
-            return Promise.all(newConnections.map(arr => userRequest(arr.userReq)))
-       }
 
         const payload = {
                     user_id: authUser.id,
@@ -93,13 +65,10 @@ router.post('/login', async (req, res, next) => {
         const token = jwt.sign(payload, process.env['JWT_SECRET']);
         // returning the logged in user ( id / email / user_type )
        // also sending back token to be used in the headers under (authorization) for protected routes
-       getData().then(data => {
-          return res.json({
+          return res.status(200).json({
             token: token,
-            user: payload,
-            new_connection_requests: reqProfiles
+            user: payload
         })
-       })
    } catch (e) {
        console.log(e);
        next();

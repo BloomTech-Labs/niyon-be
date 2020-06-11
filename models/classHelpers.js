@@ -103,14 +103,18 @@ class connectionHelper extends helperCreator{
     }
     newConnections(id) {
         try {
-            return db(this.table).where('userAcc', id).where('status', false).select("*")
+            return db(this.table)
+                .where('userAcc', id)
+                .where('status', false)
+                .where('rejected', false)
+                .select("userReq")
         } catch (e) {
             console.log(e.message)
         }
     }
     myConnections(id) {
         try {
-            return db(this.table).where('userAcc', id).where('status', true).select("userReq")
+            return db(this.table).where('userAcc', id).where('status', true).select("userReq", "userAcc")
         } catch (e) {
             console.log(e.message)
         }
