@@ -1,5 +1,5 @@
 const express = require('express');
-const { userHelper, jobHelper, locationHelper, techHelper } = require('../../models/classHelpers');
+const { userHelper, jobHelper, locationHelper, techHelper, connectHelper } = require('../../models/classHelpers');
 const restricted = require('../../Middleware/restricted');
 
 
@@ -85,17 +85,43 @@ router.get('/:id', restricted(), async (req, res, next) => {
         const tech_id = tech.map(arr => {
             return arr.id
         })
+       const myConns = await connectHelper.myConnections(user.id)
 
-        const returnedUser = {
-            ...user,
-            job_title: job.job_title,
-            location: location.location,
-            techs: tech_id,
-        }
+       async function connData(arr) {
+            console.log(arr.userReq)
+           let connProfile;
+           try {
+               return connProfile = await userHelper.findById(arr.userReq)
+           } catch (e) {
+               console.log(e)
+           }
+       }
+
+       const getData = async () => {
+            return Promise.all(myConns.map(arr => connData(arr)))
+       }
+
+       delete user.password
+       getData().then(data => {
+           res.status(200).json({
+                ...user,
+                job_title: job.job_title,
+                location: location.location,
+                techs: tech_id,
+                myConnections: data
+           })
+       })
+        // const returnedUser = {
+        //     ...user,
+        //     job_title: job.job_title,
+        //     location: location.location,
+        //     techs: tech_id,
+        //     myConnections: connections
+        // }
 
         // deleting password from return object to client for security reasons
-        delete returnedUser.password
-       return res.status(200).json(returnedUser)
+       //  delete returnedUser.password
+       // return res.status(200).json(returnedUser)
    } catch (e) {
        console.log(e);
        next();
