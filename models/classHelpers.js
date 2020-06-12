@@ -112,9 +112,23 @@ class connectionHelper extends helperCreator{
             console.log(e.message)
         }
     }
+     newConnectionRequests(id) {
+        try {
+            return db(this.table)
+                .where('userReq', id)
+                .where('status', false)
+                .where('rejected', false)
+                .select("userAcc")
+        } catch (e) {
+            console.log(e.message)
+        }
+    }
     myConnections(id) {
         try {
-            return db(this.table).where('userAcc', id).where('status', true).select("userReq", "userAcc")
+            return db(this.table)
+                .where('userAcc', id).or.where('userReq', id)
+                .and.where('status', true)
+                .select("*")
         } catch (e) {
             console.log(e.message)
         }

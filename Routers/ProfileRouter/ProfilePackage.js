@@ -91,16 +91,38 @@ router.get('/:id', restricted(), async (req, res, next) => {
             return arr.id
         })
        const myConns = await connectHelper.myConnections(user.id)
+       const myConnsAcc = myConns.filter(arr => {
+           return arr.userAcc === user.id
+       })
+       const myConnsReq = myConns.filter(arr => {
+           return arr.userReq === user.id
+       })
+
        const myRequests = await connectHelper.newConnections(user.id)
+       const myOutGoingRequests = await connectHelper.newConnectionRequests(user_id)
 
        async function connData(arr) {
-            let connProfile
-           try {
-               connProfile = await userHelper.findById(arr.userReq)
-               delete connProfile.password
-               return connProfile
-           } catch (e) {
-               console.log(e)
+               let connProfile
+               try {
+                   connProfile = await userHelper.findById(arr)
+                   // TODO refacotr this helper model to a utiles folder
+                   if (!connProfile.job_title_id) {
+                     connProfile.job_title_id = 1
+                }
+                const job = await jobHelper.findById(connProfile.job_title_id);
+
+                if (!connProfile.location_id) {
+                    connProfile.location_id = 1
+                }
+                const location = await locationHelper.findById(connProfile.location_id);
+                   delete connProfile.password
+                   return {
+                       ...connProfile,
+                       job_title: job.job_title,
+                       location: location.location
+                   }
+               } catch (e) {
+                   console.log(e)
            }
        }
 
@@ -108,11 +130,24 @@ router.get('/:id', restricted(), async (req, res, next) => {
             let connRequest
            try {
                connRequest = await userHelper.findById(arr)
+                if (!connRequest.job_title_id) {
+                     connRequest.job_title_id = 1
+                }
+                const job = await jobHelper.findById(connRequest.job_title_id);
+
+                if (!connRequest.location_id) {
+                    connRequest.location_id = 1
+                }
+                const location = await locationHelper.findById(connRequest.location_id);
                delete connRequest.password
                if (connRequest.rejected === true) {
                    delete {connRequest}
                } else {
-                   return connRequest
+                   return {
+                       ...connRequest,
+                       job_title: job.job_title,
+                       location: location.location
+                   }
                }
            } catch (e) {
                console.log(e)
@@ -120,11 +155,22 @@ router.get('/:id', restricted(), async (req, res, next) => {
        }
 
        const getData = async () => {
-           const myConnProfiles = await Promise.all(myConns.map(arr => connData(arr)));
+           const myConnProfileAcc = await Promise.all(myConnsAcc.map(arr => connData(arr.userReq)));
+           const myConnProfileReq = await Promise.all(myConnsReq.map(arr => connData(arr.userAcc)))
            const myConnRequest = await Promise.all(myRequests.map(arr => connRequest(arr.userReq)));
+           const mySentRequests = await Promise.all(myOutGoingRequests.map(arr => connRequest(arr.userAcc)));
+
+           const myConnProfiles = [];
+               myConnProfileAcc.map(arr => {
+                   myConnProfiles.push(arr)
+                })
+               myConnProfileReq.map(arr => {
+                   myConnProfiles.push(arr)
+                })
            return {
                 myConnProfiles,
-                myConnRequest
+                myConnRequest,
+                mySentRequests
            }
        }
 
@@ -136,7 +182,8 @@ router.get('/:id', restricted(), async (req, res, next) => {
                 location: location.location,
                 techs: tech_id,
                 myConnections: data.myConnProfiles,
-                myRequests: data.myConnRequest
+                myRequests: data.myConnRequest,
+                mySentRequests: data.mySentRequests
            })
        })
    } catch (e) {
