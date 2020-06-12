@@ -91,10 +91,16 @@ router.get('/:id', restricted(), async (req, res, next) => {
             return arr.id
         })
        const myConns = await connectHelper.myConnections(user.id)
-       const myConnsAcc = myConns.filter(arr => {
+
+       const myConnections = myConns.filter(arr => {
+           return arr.rejected === false && arr.status === true
+       })
+
+       const myConnsAcc = myConnections.filter(arr => {
            return arr.userAcc === user.id
        })
-       const myConnsReq = myConns.filter(arr => {
+
+       const myConnsReq = myConnections.filter(arr => {
            return arr.userReq === user.id
        })
 
