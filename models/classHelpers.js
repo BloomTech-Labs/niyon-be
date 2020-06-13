@@ -107,7 +107,7 @@ class connectionHelper extends helperCreator{
                 .where('userAcc', id)
                 .where('status', false)
                 .where('rejected', false)
-                .select("userReq")
+                .select("*")
         } catch (e) {
             console.log(e.message)
         }

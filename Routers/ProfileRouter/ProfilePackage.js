@@ -1,7 +1,8 @@
 const express = require('express');
 const { userHelper, jobHelper, locationHelper, techHelper, connectHelper } = require('../../models/classHelpers');
 const restricted = require('../../Middleware/restricted');
-const decoder = require('jwt-decode')
+const decoder = require('jwt-decode');
+const { setJobLocation } = require('../../utils/helperFunctions')
 
 
 const router = express.Router();
@@ -31,28 +32,10 @@ router.get('/', restricted(), async (req, res, next) => {
 
     const allUsers = await userHelper.getAll();
     async function userData(arr) {
-
-        try {
-            if (!arr.job_title_id) {
-                arr.job_title_id = 1
-            }
-            if (!arr.location_id) {
-                arr.location_id = 1
-            }
-            const job = await jobHelper.findById(arr.job_title_id);
-            const location = await locationHelper.findById(arr.location_id);
-            const tech_stack = await techHelper.userTech(arr.id);
-            delete arr.password;
-            const tech_id =  tech_stack.map(arr => {
-                return arr.id
-            })
-
-            return {
-                ...arr,
-                job: job.job_title,
-                location: location.location,
-                techs: tech_id
-            }
+            try {
+                const user = await setJobLocation(arr)
+                delete user.password;
+                return user
         } catch (e) {
             console.log(e)
         }
@@ -77,19 +60,8 @@ router.get('/:id', restricted(), async (req, res, next) => {
                     errorMessage: `User with the id of ${user_id} was not found`
                 })
             }
-        if (!user.job_title_id) {
-            user.job_title_id = 1
-        }
-        const job = await jobHelper.findById(user.job_title_id);
+       const userUpdate = await setJobLocation(user)
 
-        if (!user.location_id) {
-            user.location_id = 1
-        }
-        const location = await locationHelper.findById(user.location_id);
-        const tech = await techHelper.userTech(user.id);
-        const tech_id = tech.map(arr => {
-            return arr.id
-        })
        const myConns = await connectHelper.myConnections(user.id)
 
        const myConnections = myConns.filter(arr => {
@@ -108,25 +80,9 @@ router.get('/:id', restricted(), async (req, res, next) => {
        const myOutGoingRequests = await connectHelper.newConnectionRequests(user_id)
 
        async function connData(arr) {
-               let connProfile
                try {
-                   connProfile = await userHelper.findById(arr)
-                   // TODO refacotr this helper model to a utiles folder
-                   if (!connProfile.job_title_id) {
-                     connProfile.job_title_id = 1
-                }
-                const job = await jobHelper.findById(connProfile.job_title_id);
-
-                if (!connProfile.location_id) {
-                    connProfile.location_id = 1
-                }
-                const location = await locationHelper.findById(connProfile.location_id);
-                   delete connProfile.password
-                   return {
-                       ...connProfile,
-                       job_title: job.job_title,
-                       location: location.location
-                   }
+                   const connProfile = await userHelper.findById(arr);
+                   return await setJobLocation(connProfile)
                } catch (e) {
                    console.log(e)
            }
@@ -136,25 +92,7 @@ router.get('/:id', restricted(), async (req, res, next) => {
             let connRequest
            try {
                connRequest = await userHelper.findById(arr)
-                if (!connRequest.job_title_id) {
-                     connRequest.job_title_id = 1
-                }
-                const job = await jobHelper.findById(connRequest.job_title_id);
-
-                if (!connRequest.location_id) {
-                    connRequest.location_id = 1
-                }
-                const location = await locationHelper.findById(connRequest.location_id);
-               delete connRequest.password
-               if (connRequest.rejected === true) {
-                   delete {connRequest}
-               } else {
-                   return {
-                       ...connRequest,
-                       job_title: job.job_title,
-                       location: location.location
-                   }
-               }
+                return await setJobLocation(connRequest)
            } catch (e) {
                console.log(e)
            }
@@ -183,10 +121,7 @@ router.get('/:id', restricted(), async (req, res, next) => {
        delete user.password
        getData().then(data => {
            res.status(200).json({
-                ...user,
-                job_title: job.job_title,
-                location: location.location,
-                techs: tech_id,
+                ...userUpdate,
                 myConnections: data.myConnProfiles,
                 myRequests: data.myConnRequest,
                 mySentRequests: data.mySentRequests
@@ -228,15 +163,15 @@ router.post('/:id',restricted(), async (req, res, next) => {
             }
         await userHelper.update(user_id, data);
         const user = await userHelper.findById(user_id);
-        const job = await jobHelper.findById(user.job_title_id);
-        const location = await locationHelper.findById(user.location_id);
+        await setJobLocation(user)
         const tech = await techHelper.userTech(user.id);
+        const techID = tech.map(arr => {
+            return arr.id
+        })
 
         const returnedUser = {
             ...user,
-            job,
-            location,
-            tech
+            techs: techID
         }
         delete returnedUser.password
         res.status(201).json(returnedUser)

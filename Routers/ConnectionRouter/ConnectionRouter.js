@@ -28,10 +28,18 @@ router.post('/response/:id', restricted(), async (req, res, next) => {
                 status: true,
                 rejected: false
             })
+            const acceptedReq = await connectHelper.responseConnection(userReq, user_id, {
+                status: true,
+                rejected: false
+            })
             return res.status(201).json(accepted)
         }
         if (rejected === true) {
             const rejected = await connectHelper.responseConnection(user_id, userReq,  {
+                status: false,
+                rejected: true
+            })
+            const rejectedReq = await connectHelper.responseConnection(userReq, user_id,  {
                 status: false,
                 rejected: true
             })
