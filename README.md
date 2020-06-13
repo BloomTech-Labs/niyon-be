@@ -41,6 +41,13 @@ To get the server running locally:
 | GET    |`/profile`               | requires token      | Returns all users with data                        |
 | GET    |`/profile/:id`           | requires token      | Returns data for user by ID                        |
 | POST    |`/profile/:id`          | requires token      | Data fields need to be named as below, none are required|
+
+#### ConnectionRoutes
+
+| Method | Endpoint                | Access Control | Description                                  |
+| ------ | ----------------------- | -------------- | -------------------------------------------- |
+| POST    | `/connection/request/:id`    | requires token | Sends a request to a user |
+| POST    | `/connection/response/:id`          | requires token | Allows a user to either accept or reject connection request |
 # Data Model
 
 #### Registration Example
@@ -112,18 +119,88 @@ Return stucture for POST by id is the same as GET / GET by id listed below
 
 GET user by id returned data stucture example:
 {
-    id: 23
-    first_name: "Tim"
-    last_name: "Taylor"
-    bio: "Working as a junior front end web dev"
-    email: "tTaylor@hotmail.com"
-    user_type: "mentee"
-    job_titile_id: 16
-    location_id: 6
-    job_title: "Junior Front End Developer"
-    location: "Yamoussoukro, Ivory Coast"
-    techs: [4, 9, 23, 7] <= array of id's pointing to techs
-    }
+    "id": 43,
+    "first_name": "Hank",
+    "last_name": "Hill",
+    "bio": "In my professional career I enjoy working on the server side of web development, and in my personal life I LIVE and BREATH propane and propane accessories",
+    "email": "hankHill@gmail.com",
+    "user_type": "Mentor",
+    "job_title_id": 2,
+    "location_id": 3,
+    "job_title": "Full Stack Web Developer",
+    "location": "Kano, Nigeria",
+    "techs": [
+        6,
+        8,
+        11,
+        22,
+        27
+    ],
+    "myConnections": [
+        {
+            "id": 59,
+            "first_name": "Peggy",
+            "last_name": "Hill",
+            "bio": "In my past career I won 12 substitue teacher of the year awards",
+            "email": "pegHill@gmail.com",
+            "user_type": "Mentor",
+            "job_title_id": 13,
+            "location_id": 3,
+            "job_title": "Senior Developer",
+            "location": "Kano, Nigeria"
+        }
+    ],
+    "myRequests": [
+        {
+            "id": 60,
+            "first_name": "Luann",
+            "last_name": "Platter",
+            "bio": "After a wonderful career in hair and makeup and I decided it was time for a change",
+            "email": "luannHill@gmail.com",
+            "user_type": "Mentor",
+            "job_title_id": 23,
+            "location_id": 3,
+            "job_title": "Systems Engineer",
+            "location": "Kano, Nigeria"
+        }
+    ],
+    "mySentRequests": [
+        {
+            "id": 58,
+            "first_name": "Robert",
+            "last_name": "Hill",
+            "bio": "I enjoy fruit pies and riding bikes with Joseph",
+            "email": "bobHill@gmail.com",
+            "user_type": "Mentor",
+            "job_title_id": 9,
+            "location_id": 3,
+            "job_title": "Front-End Developer",
+            "location": "Kano, Nigeria"
+        }
+    ]
+}
+```
+
+#### Connection examples
+###### NOTE: The ID in the URL always points to the logged in user with connections
+```
+Post a connection request:
+ => /connection/request/:id <7>
+{
+  mentor_id: 2 => INT that points to the user you are sending the request to 
+}
+Returned:
+{
+  "Connection Request Sent"
+}
+
+Post a response to a connection request: 
+=> /connection/response/:id <2>
+{
+    "status": true || false,
+    "rejected": false || true,
+    "userReq": 7 => INT that points to the user that sent the request
+}
 ```
 
 ## Models
