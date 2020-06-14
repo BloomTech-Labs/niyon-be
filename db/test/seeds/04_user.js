@@ -19,6 +19,16 @@ exports.seed = async function(knex) {
       job_title_id: 12,
       location_id: 63
 
+    },
+      {
+      first_name: "Billy",
+      last_name: "thompson",
+      email: "billy@gmail.com",
+      password: "123",
+      user_type: "Mentor",
+      job_title_id: 12,
+      location_id: 63
+
     }
   ]);
 };

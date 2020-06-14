@@ -10,12 +10,13 @@ class helperCreator {
     }
     async findBy(filter) {
         try {
-            return db(this.table)
+            return await db(this.table)
                 .select('*')
                 .where(filter)
                 .first();
         } catch (e) {
             console.log(e);
+            return e
         }
     }
     async findById(id) {
@@ -66,20 +67,6 @@ class userHelperCreator extends helperCreator {
             .where('email', email)
             .first();
     }
-    newConnectionProfiles(id) {
-        return db(this.table)
-            .select(
-                'id',
-                'first_name',
-                'last_name',
-                'bio',
-                'user_type',
-                'location_id',
-                'job_title_id'
-            )
-            .where('id', id)
-            .first();
-    }
 }
 
 class connectionHelper extends helperCreator{
@@ -94,44 +81,48 @@ class connectionHelper extends helperCreator{
             .where("ut.userAcc",id)
             .select("*")
     }
-    responseConnection(userAcc, userReq, data) {
+    async responseConnection(userAcc, userReq, data) {
         try {
-            return db(this.table).update(data).where({userAcc: userAcc, userReq: userReq})
+            return await db(this.table).update(data).where({userAcc: userAcc, userReq: userReq})
         } catch (e) {
-            console.log(e.message)
+            console.log(e)
+            return e
         }
     }
-    newConnections(id) {
+    async newConnections(id) {
         try {
-            return db(this.table)
+            return await db(this.table)
                 .where('userAcc', id)
                 .where('status', false)
                 .where('rejected', false)
                 .select("*")
         } catch (e) {
             console.log(e.message)
+            return e
         }
     }
-     newConnectionRequests(id) {
+     async newConnectionRequests(id) {
         try {
-            return db(this.table)
+            return await db(this.table)
                 .where('userReq', id)
                 .where('status', false)
                 .where('rejected', false)
                 .select("userAcc")
         } catch (e) {
             console.log(e.message)
+            return e
         }
     }
-    myConnections(id) {
+    async myConnections(id) {
         try {
-            return db(this.table)
+            return await db(this.table)
                 .where('userAcc', id).orWhere('userReq', id)
                 .andWhere('status', true)
                 .andWhere("rejected", false)
                 .select("*");
         } catch (e) {
             console.log(e.message)
+            return e
         }
     }
 }
