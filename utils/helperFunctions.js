@@ -5,6 +5,7 @@ const {
     locationHelper,
     jobHelper
 } = require('../models/classHelpers');
+const axios = require('axios')
 
 async function setJobLocation(user) {
 
@@ -30,6 +31,54 @@ async function setJobLocation(user) {
                }
 }
 
+async function filterProfileConnection(id, user) {
+    const myUser = user
+    const userConnections = await connectHelper.myConnections(id);
+    const myConnectionId = [];
+
+       await userConnections.map(arr => {
+           if (arr.userReq === id) {
+               myConnectionId.push(arr.userAcc)
+           } else {
+               myConnectionId.push(arr.userReq)
+           }
+        })
+    async function connData(arr) {
+           if (arr === user.id) {
+               return {
+                   ...user,
+                   myConnection: true
+               }
+           }
+    }
+
+    const getData = async () => {
+           return await Promise.all(myConnectionId.map(arr => connData(arr)))
+    }
+    getData().then(data => {
+        return data
+    })
+}
+
+async function axiosCall(url, array) {
+        try {
+            await axios.get(url)
+                .then(res => {
+                    res.data.map(arr => {
+                        array.push(arr)
+                    })
+                })
+                .catch(err => {
+                    console.log(err)
+                })
+        } catch (e) {
+            console.log(e)
+            return e
+        }
+}
+
 module.exports = {
-    setJobLocation
+    setJobLocation,
+    filterProfileConnection,
+    axiosCall
 }

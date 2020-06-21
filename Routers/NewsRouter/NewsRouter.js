@@ -3,6 +3,7 @@ const axios = require('axios')
 const moment = require('moment')
 const restricted = require('../../Middleware/restricted')
 const { userHelper } = require('../../models/classHelpers')
+const { axiosCall } = require('../../utils/helperFunctions')
 
 const router = express.Router()
 
@@ -10,15 +11,7 @@ router.get('/', restricted(), async (req, res, next) => {
        try {
     let data = []
        const url = 'https://dev.to/api/articles'
-       await axios.get(url)
-           .then(res => {
-               res.data.map(arr => {
-                   data.push(arr)
-               })
-           })
-           .catch(err => {
-               console.log(err)
-           })
+       await axiosCall(url, data)
        if (!data) {
            return res.status(500).json({
                errorMessage: 'Oops, looks like something got crossed up, please try your request again'
@@ -38,15 +31,7 @@ router.get('/:topic', restricted(), async (req, res, next) => {
     const { topic } = req.params
     let data = []
    const url = `https://dev.to/api/articles?tag=${topic}`
-       await axios.get(url)
-           .then(res => {
-               res.data.map(arr => {
-                   data.push(arr)
-               })
-           })
-           .catch(err => {
-               console.log(err)
-           })
+       await axiosCall(url, data)
        if (!data) {
            return res.status(404).json({
                message: `Sorry we could not find any articles with ${topic}`
