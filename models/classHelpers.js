@@ -125,6 +125,19 @@ class connectionHelper extends helperCreator{
             return e
         }
     }
+    async allMyConnections(id) {
+        console.log(id)
+        try {
+            return await db(this.table)
+            .where('userAcc', id).orWhere('userReq', id)
+            .select("*");
+        } catch (e) {
+            console.log(e, id)
+            return [
+                { userReq: id, userAcc: id, status: true, rejected: false }
+            ]
+        }
+    }
 }
 
 const userHelper = new userHelperCreator('user');

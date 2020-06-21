@@ -24,8 +24,12 @@ router.post('/register', async (req, res, next) => {
         const newUser = await userHelper.createUser(req.body);
             // deleting password to return to client for security
             delete newUser.password
+        const payload = {
+                newUser,
+                user_id: newUser.id
+        }
         // creating a token and sending by newly created user
-        const token = jwt.sign({payload: newUser}, process.env['JWT_SECRET']);
+        const token = jwt.sign(payload, process.env['JWT_SECRET']);
         // sending back newly created user with auto ID
         // also sending back token to be used in the headers under (authorization) for protected routes
         res.status(201).json({
