@@ -2,7 +2,7 @@ const express = require('express');
 const { userHelper, jobHelper, locationHelper, techHelper, connectHelper } = require('../../models/classHelpers');
 const restricted = require('../../Middleware/restricted');
 const decoder = require('jwt-decode');
-const { setJobLocation } = require('../../utils/helperFunctions')
+const { setJobLocation, filterProfileConnection } = require('../../utils/helperFunctions')
 
 
 const router = express.Router();
@@ -29,20 +29,52 @@ router.get('/', restricted(), async (req, res, next) => {
    try {
        const token = req.headers.authorization;
        const tokenAuth = decoder(token);
+       const userConnections = await connectHelper.allMyConnections(tokenAuth.user_id);
+       const myConnectionId = [];
+
+       await userConnections.map(arr => {
+           if (arr.userReq === tokenAuth.user_id) {
+               myConnectionId.push(arr.userAcc)
+           } else {
+               myConnectionId.push(arr.userReq)
+           }
+        })
+
+    myConnectionId.push(tokenAuth.user_id)
 
     const allUsers = await userHelper.getAll();
+
     async function userData(arr) {
-            try {
-                const user = await setJobLocation(arr)
-                delete user.password;
-                return user
+        try {
+            const user = await setJobLocation(arr)
+            return user
         } catch (e) {
             console.log(e)
         }
     }
-    const getData = async () => {
-        return Promise.all(allUsers.map(arr => userData(arr)))
+
+    async function setUser(arr) {
+        try {
+            const user =  await userHelper.findById(arr);
+            delete user.password
+            return user
+        } catch (e) {
+            console.log(e)
+        }
     }
+
+    const getData = async () => {
+        const allProfiles = await Promise.all(allUsers.map(arr => userData(arr)));
+
+        const allProfileId = allProfiles.map(arr => {
+            return arr.id
+        })
+
+        const allFilteredProfiles = await allProfileId.filter(user => !myConnectionId.includes(user))
+        const allUserObjects = await Promise.all(allFilteredProfiles.map(user => setUser(user)))
+        return await Promise.all(allUserObjects.map(arr => userData(arr)))
+    }
+
     getData().then(data => {
         res.status(200).json(data)
     })
