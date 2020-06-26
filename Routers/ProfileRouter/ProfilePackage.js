@@ -27,11 +27,13 @@ router.get('/profilePackage',restricted(), async (req, res, next) => {
 
 router.get('/', restricted(), async (req, res, next) => {
    try {
+       // pulling token from headers and decoding to get user_id
        const token = req.headers.authorization;
        const tokenAuth = decoder(token);
+       // using the user_id to find all connections associated with user ( connected and rejected )
        const userConnections = await connectHelper.allMyConnections(tokenAuth.user_id);
+       // filtering userConnections to grab all id's that are not === to the logged in user
        const myConnectionId = [];
-
        await userConnections.map(arr => {
            if (arr.userReq === tokenAuth.user_id) {
                myConnectionId.push(arr.userAcc)
@@ -40,10 +42,12 @@ router.get('/', restricted(), async (req, res, next) => {
            }
         })
 
+    // pushing in the logged in user ID to filter their own profile as well
     myConnectionId.push(tokenAuth.user_id)
 
     const allUsers = await userHelper.getAll();
 
+    // async function to set location, job, and techs for users to be returned
     async function userData(arr) {
         try {
             const user = await setJobLocation(arr)
@@ -53,6 +57,7 @@ router.get('/', restricted(), async (req, res, next) => {
         }
     }
 
+    // async function to locate user data by ID
     async function setUser(arr) {
         try {
             const user =  await userHelper.findById(arr);
@@ -63,15 +68,21 @@ router.get('/', restricted(), async (req, res, next) => {
         }
     }
 
+    // async function we wrap our array methods in to create async array methods
     const getData = async () => {
+        // mapping over all users in the database to complete profile with job, location, techs
         const allProfiles = await Promise.all(allUsers.map(arr => userData(arr)));
 
+        // mapping over and pulling our all the users ID's into a single array
         const allProfileId = allProfiles.map(arr => {
             return arr.id
         })
 
+        // filtering all the users by an array of users connected with the logged in user
         const allFilteredProfiles = await allProfileId.filter(user => !myConnectionId.includes(user))
+        // mapping over an array of ID's not connected to the logged in user, setting their profile
         const allUserObjects = await Promise.all(allFilteredProfiles.map(user => setUser(user)))
+        // mapping over the file array of filtered users to complete their profile with job, location, techs
         return await Promise.all(allUserObjects.map(arr => userData(arr)))
     }
 
@@ -85,6 +96,7 @@ router.get('/', restricted(), async (req, res, next) => {
 
 router.get('/:id', restricted(), async (req, res, next) => {
    try {
+        // grabbing the id from the params and locating the user in the DB, or returning an error message if user is null
         const user_id = req.params.id;
         const user = await userHelper.findById(user_id);
             if (!user) {
@@ -92,10 +104,12 @@ router.get('/:id', restricted(), async (req, res, next) => {
                     errorMessage: `User with the id of ${user_id} was not found`
                 })
             }
+       // using a helper function to set the job, location, and techs of user
        const userUpdate = await setJobLocation(user)
-
+       // Finding all the connections the current user has, both connected and rejected
        const myConns = await connectHelper.myConnections(user.id)
 
+       // lines 112 - 126 are filtering all the connections the user has into different categories
        const myConnections = myConns.filter(arr => {
            return arr.rejected === false && arr.status === true
        })
@@ -108,9 +122,12 @@ router.get('/:id', restricted(), async (req, res, next) => {
            return arr.userReq === user.id
        })
 
+       // grabbing the logged in users outgoing and incoming connection requests
        const myRequests = await connectHelper.newConnections(user.id)
        const myOutGoingRequests = await connectHelper.newConnectionRequests(user_id)
 
+       // lines 130 - 147 are two async functions we use to set the profiles of connections
+       // TODO: look to refactor lines 131 - 148 into one function
        async function connData(arr) {
                try {
                    const connProfile = await userHelper.findById(arr);
@@ -130,12 +147,18 @@ router.get('/:id', restricted(), async (req, res, next) => {
            }
        }
 
+       // async function to create array methods that are async
        const getData = async () => {
+           // creating an array of connections requested by the current user
            const myConnProfileAcc = await Promise.all(myConnsAcc.map(arr => connData(arr.userReq)));
-           const myConnProfileReq = await Promise.all(myConnsReq.map(arr => connData(arr.userAcc)))
+           // creating an array of connections the current user accepted
+           const myConnProfileReq = await Promise.all(myConnsReq.map(arr => connData(arr.userAcc)));
+           // creating an array of incoming connection request for the current user
            const myConnRequest = await Promise.all(myRequests.map(arr => connRequest(arr.userReq)));
+           // creating an array of outgoing connection requests from the current user
            const mySentRequests = await Promise.all(myOutGoingRequests.map(arr => connRequest(arr.userAcc)));
 
+           // combining connections the user request that were accepted, and requests that the user accepted into one array
            const myConnProfiles = [];
                myConnProfileAcc.map(arr => {
                    myConnProfiles.push(arr)
@@ -143,14 +166,16 @@ router.get('/:id', restricted(), async (req, res, next) => {
                myConnProfileReq.map(arr => {
                    myConnProfiles.push(arr)
                 })
+           // creating the return object from our async function
            return {
                 myConnProfiles,
                 myConnRequest,
                 mySentRequests
            }
        }
-
+       // deleting the logged in user password for security
        delete user.password
+       // our async function to turn array methods to async and the return object we create
        getData().then(data => {
            res.status(200).json({
                 ...userUpdate,
