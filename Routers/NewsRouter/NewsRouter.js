@@ -3,11 +3,11 @@ const axios = require('axios')
 const moment = require('moment')
 const restricted = require('../../Middleware/restricted')
 const { userHelper } = require('../../models/classHelpers')
-const { axiosCall } = require('../../utils/helperFunctions')
+const { axiosCall, formatDevArticles } = require('../../utils/helperFunctions')
 
 const router = express.Router()
 
-router.get('/', restricted(), async (req, res, next) => {
+router.get('/', async (req, res, next) => {
        try {
     let data = []
        const url = 'https://dev.to/api/articles'
@@ -17,7 +17,16 @@ router.get('/', restricted(), async (req, res, next) => {
                errorMessage: 'Oops, looks like something got crossed up, please try your request again'
            })
        } else {
-           return res.status(200).json(data)
+           async function format(arr) {
+               return await formatDevArticles(arr)
+           }
+
+           const getData = async () => {
+               return await Promise.all(data.map(arr => format(arr)))
+           }
+           getData().then(data => {
+               return res.status(200).json(data)
+           })
        }
    } catch (e) {
        console.log(e)
@@ -25,7 +34,7 @@ router.get('/', restricted(), async (req, res, next) => {
    }
 });
 
-router.get('/:topic', restricted(), async (req, res, next) => {
+router.get('/:topic', async (req, res, next) => {
    try {
 
     const { topic } = req.params
@@ -37,7 +46,16 @@ router.get('/:topic', restricted(), async (req, res, next) => {
                message: `Sorry we could not find any articles with ${topic}`
            })
        } else {
-           return res.status(200).json(data)
+            async function format(arr) {
+               return await formatDevArticles(arr)
+           }
+
+           const getData = async () => {
+               return await Promise.all(data.map(arr => format(arr)))
+           }
+           getData().then(data => {
+               return res.status(200).json(data)
+           })
        }
    } catch (e) {
        console.log(e)

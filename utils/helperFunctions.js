@@ -77,8 +77,26 @@ async function axiosCall(url, array) {
         }
 }
 
+async function formatDevArticles(arr) {
+    delete arr.readable_reactions_count;
+                delete arr.slug;
+                delete arr.path;
+                delete arr.comments_count;
+                delete arr.public_reactions_count;
+                delete arr.collection_id;
+                delete arr.published_timestamp;
+                delete arr.positive_reactions_count;
+                delete arr.canonical_url;
+                delete arr.edited_at;
+                delete arr.crossposted_at;
+                delete arr.last_comment_at;
+                delete arr.tags;
+                return arr
+}
+
 module.exports = {
     setJobLocation,
     filterProfileConnection,
-    axiosCall
+    axiosCall,
+    formatDevArticles
 }
