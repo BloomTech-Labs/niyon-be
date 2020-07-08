@@ -42,12 +42,19 @@ To get the server running locally:
 | GET    |`/profile/:id`           | requires token      | Returns data for user by ID                        |
 | POST    |`/profile/:id`          | requires token      | Data fields need to be named as below, none are required|
 
-#### ConnectionRoutes
+#### Connection Routes
 
 | Method | Endpoint                | Access Control | Description                                  |
 | ------ | ----------------------- | -------------- | -------------------------------------------- |
 | POST    | `/connection/request/:id`    | requires token | Sends a request to a user |
 | POST    | `/connection/response/:id`          | requires token | Allows a user to either accept or reject connection request |
+
+#### News Routes
+
+| Method | Endpoint                | Access Control | Description                                  |
+| ------ | ----------------------- | -------------- | -------------------------------------------- |
+| GET    | `/news`                 | requires token | Gets an array of  articles from dev.to       |
+| GET    | `/news/:topic`          | requires token | Gets an array of articles by provided topic from dev.to |
 # Data Model
 
 #### Registration Example
@@ -201,6 +208,41 @@ Post a response to a connection request:
     "rejected": false || true,
     "userReq": 7 => INT that points to the user that sent the request
 }
+```
+
+#### News Examples
+###### Both news routes return an array formatted the same as below
+
+```
+Returned:
+  [
+    {
+        "type_of": "article",
+        "id": 387684,
+        "title": "Rails Boilerplate",
+        "description": "So far in this series, we have looked at the benefits of using a Boilerplate to streamline your workflow, and a two articles on how to setup a React Boilerplate with parcel instead of Webpack, and a traditional means to compile and bundle a traditional HTML/SCSS project using Parcel. So, what about Rails?",
+        "readable_publish_date": "Jul  8",
+        "url": "https://dev.to/eclecticcoding/rails-boilerplate-4hgf",
+        "cover_image": "https://res.cloudinary.com/practicaldev/image/fetch/s--XvIQ96V---/c_imagga_scale,f_auto,fl_progressive,h_420,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/i/v03sv2zahynilyazhn6d.jpg",
+        "social_image": "https://res.cloudinary.com/practicaldev/image/fetch/s--_JBFBkUQ--/c_imagga_scale,f_auto,fl_progressive,h_500,q_auto,w_1000/https://dev-to-uploads.s3.amazonaws.com/i/v03sv2zahynilyazhn6d.jpg",
+        "created_at": "2020-07-08T13:00:47Z",
+        "published_at": "2020-07-08T13:03:02Z",
+        "tag_list": [
+            "rails",
+            "ruby",
+            "webdev",
+            "tutorials"
+        ],
+        "user": {
+            "name": "Chuck ",
+            "username": "eclecticcoding",
+            "twitter_username": "EclecticCoding",
+            "github_username": "eclectic-coding",
+            "website_url": "https://eclecticsaddlebag.com",
+            "profile_image": "https://res.cloudinary.com/practicaldev/image/fetch/s--W4mHnydu--/c_fill,f_auto,fl_progressive,h_640,q_auto,w_640/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/69818/4ac54d27-6960-4a16-9615-bfbff7176484.jpg",
+            "profile_image_90": "https://res.cloudinary.com/practicaldev/image/fetch/s--NXpwQVyN--/c_fill,f_auto,fl_progressive,h_90,q_auto,w_90/https://dev-to-uploads.s3.amazonaws.com/uploads/user/profile_image/69818/4ac54d27-6960-4a16-9615-bfbff7176484.jpg"
+        }
+    ]
 ```
 
 ## Models
