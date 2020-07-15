@@ -31,3 +31,10 @@ test("login try with no email", async () => {
     .send({ email: "", password: "password1" }); //testing without email
   expect(res.status).toBe(409); //testing to see if 404 comes back
 });
+
+test("login with no password", async () => {  
+  const res = await supertest(server)    
+  .post("/auth/login")     
+  .send({ email: "test@gmail.com", password: "" });     
+  expect(res.status).toBe(401);
+});
