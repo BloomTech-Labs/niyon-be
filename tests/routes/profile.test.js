@@ -56,3 +56,10 @@ test('testing get for profile', async () =>{
   expect(res.status).toBe(200)
   expect(res.body[1].first_name).toBe('tawne')
 })
+
+test('testing get for profile at incorrect endpoint (expect 404)', async () =>{  
+  const res = await supertest(server)  
+  .get('/profile1/')  
+  .set('authorization', token)  
+  expect(res.status).toBe(404)  
+})
