@@ -45,21 +45,29 @@ test("post profile/:id", async () => {
   const res = await supertest(server)
     .post("/profile/1")
     .set("authorization", token)
-    .send({bio: 'test'})
+    .send({ bio: "test" });
   expect(res.status).toBe(201);
 });
 
-test('testing get for profile', async () =>{
+test("testing get for profile", async () => {
   const res = await supertest(server)
-  .get('/profile/')
-  .set('authorization', token)
-  expect(res.status).toBe(200)
-  expect(res.body[1].first_name).toBe('tawne')
-})
+    .get("/profile/")
+    .set("authorization", token);
+  expect(res.status).toBe(200);
+  expect(res.body[1].first_name).toBe("tawne");
+});
 
-test('testing get for profile at incorrect endpoint (expect 404)', async () =>{  
-  const res = await supertest(server)  
-  .get('/profile1/')  
-  .set('authorization', token)  
-  expect(res.status).toBe(404)  
-})
+test("testing get for profile at incorrect endpoint (expect 404)", async () => {
+  const res = await supertest(server)
+    .get("/profile1/")
+    .set("authorization", token);
+  expect(res.status).toBe(404);
+});
+
+test("post profile/:id not working", async () => {
+  const res = await supertest(server)
+    .post("/profile/1233")
+    .set("authorization", token)
+    .send({ bio: "" });
+  expect(res.status).toBe(400);
+});
