@@ -2,6 +2,7 @@ const supertest = require("supertest");
 const server = require("../../server");
 const db = require("../../db/config");
 const jwt = require("jsonwebtoken");
+
 const user = {
   id: 1,
 };
@@ -71,3 +72,19 @@ test("post profile/:id not working", async () => {
     .send({ bio: "" });
   expect(res.status).toBe(400);
 });
+
+test("get:packageProfile authorized not working", async () => {
+  const next = jest.fn();
+  try {
+    const res = await supertest(server)
+    .get("/profile/profilePackage")
+    expect(res.status).toBeDefined();
+    expect(res.status).toBe(401);
+    expect(res.error).toBeDefined();
+  } catch(e) {
+    expect(e).toMatch("error");
+    expect(next).toHaveBeenCalled();
+    // expect(next).toHaveBeenCalledWith(e)
+   }
+});
+

@@ -20,7 +20,7 @@ router.get('/profilePackage',restricted(), async (req, res, next) => {
         }
         return res.status(200).json(profile_starter);
     } catch (e) {
-        console.log(e);
+        // console.log(e);
         next();
     }
 });
