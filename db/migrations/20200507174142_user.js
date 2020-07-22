@@ -7,6 +7,8 @@ exports.up = async function(knex) {
     await knex.schema.createTable('location', location =>{
         location.increments('id');
         location.string('location');
+        location.float('latitude',10, 8)
+        location.float('longitude', 10, 8)
     });
     await knex.schema.createTable('tech', tech =>{
         tech.increments('id');
