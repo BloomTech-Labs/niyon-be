@@ -16,7 +16,7 @@ exports.seed = async function(knex) {
         {location: 'Ovo, Nigeria', longitude: 1, latitude:1 },
         {location: 'Enugu, Nigeria' , longitude: 1, latitude:1},
         {location: 'Abeokuta, Nigeria' , longitude: 1, latitude:1},
-        {location: 'Onitsha, Nigeria', longitude: 1, latitude:1 },
+        {location: 'Onitsha, Nigeria', longitude: 6.792318, latitude: 6.133234 },
         {location: 'Warri, Nigeria', longitude: 1, latitude:1 },
         {location: 'Sokoto, Nigeria', longitude: 1, latitude:1},
         {location: 'Okene, Nigeria', longitude: 1, latitude:1},

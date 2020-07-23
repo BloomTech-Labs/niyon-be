@@ -137,7 +137,7 @@ class connectionHelper extends helperCreator {
 
 const userHelper = new userHelperCreator("user");
 const jobHelper = new helperCreator("job_title");
-const locationHelper = new locationHelperCreator(
+const locationHelper = new helperCreator(
   "location",
   "latitude",
   "longitude"
