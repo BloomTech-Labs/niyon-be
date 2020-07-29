@@ -7,6 +7,10 @@ const {
 } = require('../models/classHelpers');
 const axios = require('axios')
 
+/*
+    This function takes the users id's for job, location, tech and returns
+    three keys to the user object with their values
+ */
 async function setJobLocation(user) {
 
        if (!user.job_title_id) {
@@ -60,6 +64,7 @@ async function filterProfileConnection(id, user) {
     })
 }
 
+// axios call to Dev.to for our news feed data
 async function axiosCall(url, array) {
         try {
             await axios.get(url)
@@ -76,7 +81,7 @@ async function axiosCall(url, array) {
             return e
         }
 }
-
+// removing unused keys from the return object
 async function formatDevArticles(arr) {
     delete arr.readable_reactions_count;
                 delete arr.slug;

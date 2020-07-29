@@ -11,6 +11,7 @@ router.get('/', async (req, res, next) => {
        try {
     let data = []
        const url = 'https://dev.to/api/articles'
+       // axios call lives in the utils folder in helperFunctions.js
        await axiosCall(url, data)
        if (!data) {
            return res.status(500).json({
@@ -18,6 +19,7 @@ router.get('/', async (req, res, next) => {
            })
        } else {
            async function format(arr) {
+               // formatDevArticles lives in the utils folder in helperFunctions.js
                return await formatDevArticles(arr)
            }
 
@@ -33,7 +35,12 @@ router.get('/', async (req, res, next) => {
        next()
    }
 });
-
+/*
+    this route is not currently being used in the Niyon app
+    by using a 'topic' in the url such as "java" will only
+    return articles relating the "java" in the same format
+    as the above route
+*/
 router.get('/:topic', async (req, res, next) => {
    try {
 
@@ -63,6 +70,13 @@ router.get('/:topic', async (req, res, next) => {
    }
 });
 
+/*
+    this route is not currently used in the app or fully fleshed out
+    the idea behind this route was to allow mentors to write articles
+    for dev.to's blog under the organization of Niyon so that their
+    name will be show as well as the Niyon logo, need to read more into
+    the docs for dev.to's api
+*/
 router.post('/:id', async (req, res, next) => {
     try {
         const { id } = req.params

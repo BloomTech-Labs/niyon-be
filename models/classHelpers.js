@@ -1,6 +1,7 @@
 const db = require('../db/config');
 const bcrypt = require('bcrypt')
 
+// base class every simple and generic db interactions
 class helperCreator {
     constructor(table) {
         this.table = table
@@ -33,7 +34,7 @@ class helperCreator {
         }
     }
 }
-
+// class to deal with the tech table that extends from the base class
 class techHelperCreator extends helperCreator {
     constructor(table, joinTable, interTable) {
         super(table);
@@ -51,7 +52,7 @@ class techHelperCreator extends helperCreator {
             .select("t.name", "t.type", "t.id")
     }
 }
-
+// class to deal with the user table that extends from the base class
 class userHelperCreator extends helperCreator {
     constructor(table) {
         super(table);
@@ -68,7 +69,7 @@ class userHelperCreator extends helperCreator {
             .first();
     }
 }
-
+// class to deal with the connection table that extends from the base class
 class connectionHelper extends helperCreator{
     constructor(table) {
         super(table);
