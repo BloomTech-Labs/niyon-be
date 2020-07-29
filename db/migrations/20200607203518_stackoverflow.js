@@ -1,4 +1,7 @@
-
+/*
+    this table has been migrated to the production db
+    no routes or models have been created
+*/
 exports.up = async function(knex) {
   await knex.schema.createTable('question', table => {
       table.increments('id');
